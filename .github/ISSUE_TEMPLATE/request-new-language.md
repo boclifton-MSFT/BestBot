@@ -1,45 +1,60 @@
 ---
 name: Request a new language
-about: Request a new programming language for BestPracticesMcp. Choose to attach your own draft or ask Copilot to generate a first draft.
+about: Request a new programming language for BestPracticesMcp. Provide only a language name and optional authoritative sources; Copilot or maintainers can handle the rest.
 title: "[Language request] %s"
 labels: enhancement, needs-triage
 assignees: ''
 ---
 
-Please use this form to propose a new language. Keep answers short so the issue is easy to scan on GitHub.
+Please fill only the fields below. That's all we need from you.
 
-## 1) Basic
-- Language name:
-- One-line reason to include this language:
+## Language
+- Language name (required):
 
-## 2) How you'd like to contribute
-- [ ] I will attach a draft best-practices Markdown file.
-- [ ] Please generate a first-draft Markdown for me (Copilot).
-
-If you checked "Please generate", give 2–4 bullets describing what to include (e.g. formatting, testing, packaging, security):
+## Authoritative documentation sources (optional)
+Provide one URL per line (official docs, language website, RFCs, major style guides):
 - 
 - 
 - 
 
-Preferred length for generated draft: (choose one)
-- short (~100 lines) / medium (~150 lines) / long (~250 lines)
+---
 
-Preferred tone: practical / detailed / beginner-friendly / reference
+## COPILOT INSTRUCTIONS (automation only, submitter please DO NOT EDIT)
 
-## 3) Licensing & attribution
-- Is the content original? (yes / no)
-- If no, list sources and license info or links:
+```COPILOT
+1) Read the "Language name" and any provided authoritative URLs.
+   - If any Authoritative Documentation Sources are provided above, include them as references.
+   - Even if there are Authoritative Documentation Sources are provided, search the internet for 3-5 (total) sources for reference documentation.
+2) Create a best-practices Markdown file at: Languages/<Language>/<language>-best-practices.md
+   - Target ~150 lines (100–250 acceptable).
+   - Sections to include (in order):
+     - Short overview (1–2 paragraphs)
+     - When to use this language in projects
+     - Tooling & ecosystem (compilers, package managers, linters/formatters)
+     - Recommended formatting & linters with config snippets
+     - Testing & CI recommendations with example commands
+     - Packaging & release guidance
+     - Security & secrets best practices
+     - Recommended libraries (1–2 per common need)
+     - Minimal example (hello world + brief build/test CI snippet)
+     - Further reading: include any provided authoritative URLs
+   - Attribute sources and include brief license/attribution notes where needed.
+3) Add a C# MCP tool at: Languages/<Language>/<Language>.cs
+   - Tool must expose the markdown content via the MCP SSE endpoint, matching existing patterns in the repo.
+   - Keep the tool minimal (return the file contents, with simple in-memory caching).
+4) Update README.md
+   - Add the language to the "Included languages" list and include the resource path and MCP tool path.
+   - Include a one-line description and link to the markdown file.
+5) Validate build & formatting
+   - Run: dotnet build BestPracticesMcp.sln
+   - Run: dotnet format BestPracticesMcp.sln --verify-no-changes (or fix formatting if needed)
+6) Open a PR containing the changes
+   - PR title: "Add <Language> best practices (Copilot-generated)" or similar
+   - PR body: list authoritative sources used and note any manual checks required.
 
-## 4) Submitter checklist (please complete before filing)
-- [ ] Chosen one of the contribution options in section 2
-- [ ] Confirmed license/attribution is compatible with this repo
-- [ ] Included a suggested README entry (or short sentence) listing the resource path and tool path
+Notes:
+- If a provided source has restrictive licensing, include a short note in the markdown and avoid copying verbatim.
+- Keep generated content original; favor summaries and links to authoritative docs.
+```
 
-## 5) Maintainer acceptance checklist (for PR)
-- [ ] Add Markdown: Languages/<Language>/<language>-best-practices.md
-- [ ] Add MCP tool: Languages/<Language>/<Language>.cs (or Functions/<Language>Tools.cs) following existing patterns
-- [ ] Update README "Included languages" with language and resource/tool paths in the same PR
-- [ ] Run `dotnet build` and `dotnet format --verify-no-changes`
-- [ ] Verify the new resource is accessible via the MCP endpoint
-
-Thank you — a maintainer will triage this request. If you asked Copilot to generate a draft, please review the generated content for accuracy and licensing before merging.
+Thank you — provide the language name and any links above and a maintainer or Copilot automation can take it from there.
