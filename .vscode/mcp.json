@@ -1,10 +1,15 @@
 {
   "inputs": [
-
+    {
+      "type": "promptString",
+      "id": "function-port",
+      "description": "Port for local function host",
+      "default": "7071"
+    }
   ],
   "servers": {
     "BestPractices-Local": {
-      "url": "http://localhost:7071/runtime/webhooks/mcp/sse",
+      "url": "http://localhost:${input:function-port}/runtime/webhooks/mcp/sse",
       "type": "sse"
     }
   }

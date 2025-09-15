@@ -1,65 +1,55 @@
 # TASKLIST
 
-This file records completed work, immediate validation steps, and a backlog of identified tasks for the BestPracticesMcp project.
+Last updated: 2025-09-15
 
-## Completed
+This document records completed work, immediate validation steps, and a prioritized backlog for the BestPracticesMcp project. Tasks are organized into phases so the team can quickly see what is done, what to do next, and what we might do later.
 
-- Added centralized logging helpers
-  - `Functions/ToolLogging.cs` — single source-generated LoggerMessage partial class plus a generic wrapper `ToolLogging<T>` for per-tool usage.
-- Added shared file caching implementation
-  - `Functions/FileCache.cs` — process-wide, per-path cache with per-entry semaphore locking and TTL support.
-- Refactored existing tools to use shared helpers
-  - `Functions/Python.cs` — replaced per-class cache and logging helpers with `FileCache` and `ToolLogging<PythonTools>`.
-  - `Functions/Csharp.cs` — replaced per-class cache and logging helpers with `FileCache` and `ToolLogging<McpTools>`.
-  - `Functions/Vue3.cs` — replaced per-class cache and logging helpers with `FileCache` and `ToolLogging<Vue3Tools>`.
-- Removed duplicated logger partial classes
-  - Removed the `*ToolsLogs` extension classes; logging is now centralized in `ToolLogging.cs`.
+## Next Up (priority)
 
-## Immediate validation (recommended)
+These are the highest-priority, near-term tasks. Aim to complete these in the next 1–2 sprints.
 
-- Build the solution to ensure source-generated loggers are produced and code compiles:
-  - `dotnet restore` (if needed)
-  - `dotnet build BestPractices.sln`
-- Run formatter check before committing:
-  - `dotnet format BestPractices.sln --verify-no-changes` (fix formatting with `dotnet format` if needed)
+- 2025-09-15 — Validate build and formatting (Immediate)
+  - Run: `dotnet restore` then `dotnet build BestPracticesMcp.sln` and `dotnet format BestPracticesMcp.sln --verify-no-changes`.
+- 2025-09-18 — Add MCP tool class for TypeScript (planned)
+  - Implement `Functions/TypescriptTools.cs` following existing tool patterns so the TypeScript content is served via MCP endpoints.
+- 2025-09-22 — CI pipeline: build + format + (future) tests
+  - Add GitHub Actions workflow to run `dotnet build`, `dotnet format --verify-no-changes`, and test steps when tests exist.
+- 2025-09-29 — Add unit and integration tests for caching and file serving
+  - Create tests that validate `FileCache` behavior (TTL, concurrency) and tool endpoints that serve resources.
 
-## Backlog / Future tasks
+## Future (Not Planned)
 
-Priority items:
-- Add best-practices content for additional languages:
-  - `TypeScript` — Official sources:
-    - https://www.typescriptlang.org/docs/
-    - https://www.typescriptlang.org/handbook/
-  - `Java` — Official sources:
-    - https://docs.oracle.com/en/java/
-    - https://openjdk.org/
-    - https://google.github.io/styleguide/javaguide.html
-  - `Go` — Official sources:
-    - https://go.dev/doc/
-    - https://go.dev/doc/effective_go
-  - `Rust` — Official sources:
-    - https://www.rust-lang.org/learn
-    - https://doc.rust-lang.org/book/
-    - https://rust-lang.github.io/api-guidelines/
-  - `Kotlin` — Official sources:
-    - https://kotlinlang.org/docs/home.html
-    - https://kotlinlang.org/docs/coding-conventions.html
-- Add MCP tool implementations for new languages (create `Functions/<Lang>Tools.cs` following the existing pattern).
-- Add CI pipeline steps to:
-  - Build the solution
-  - Run `dotnet format --verify-no-changes`
-  - Run unit tests (when present)
-- Add unit and integration tests for the caching and file-serving behavior.
+Ideas and lower-priority items to pursue when time and resources permit.
 
-Enhancements and polish:
-- Provide example MCP client configuration and validation scripts in `.vscode/`.
-- Improve documentation: more detailed `Resources/*` editing guidelines and release notes.
+- Add best-practices content for additional languages (one item per language):
+  - Java — resources: Oracle docs, OpenJDK, Google Java Style Guide
+  - Go — resources: go.dev docs, Effective Go
+  - Rust — resources: Rust book, API guidelines
+  - Kotlin — resources: kotlinlang docs and coding conventions
+- Add MCP tool implementations for the above languages (create `Functions/<Lang>Tools.cs`).
+- Provide example MCP client configurations and validation scripts in `.vscode/`.
 - Add PR templates and contributing workflow automation (branch naming, changelogs, labels).
 - Add Azure deployment smoke tests and post-deploy verification steps.
 
-## Notes
+## Notes and conventions
 
-If you want, I can:
-- Add initial `Resources/*.md` stubs for the recommended languages.
-- Create MCP tool classes for them using the same pattern.
-- Run the solution build and start fixing any compile or formatting issues.
+- Dates are YYYY-MM-DD and indicate the date the task was completed or planned.
+- Update this file whenever you complete a task or reprioritize work. Keep completed items concise and link to files changed.
+- For immediate help, open an issue or ping the repository owner.
+- 
+- Note: `FileCache.cs` and `ToolLogging.cs` were moved from `Functions/` to `Utilities/` on 2025-09-15. Update any references if you relied on the old paths.
+
+## Completed
+
+- 2025-09-15 — Added centralized logging helpers
+  - `Utilities/ToolLogging.cs` — single source-generated LoggerMessage partial and `ToolLogging<T>` wrapper for per-tool loggers.
+- 2025-09-15 — Added shared file caching implementation
+  - `Utilities/FileCache.cs` — process-wide, per-path cache with per-entry semaphore locking and TTL support.
+- 2025-09-15 — Refactored existing tools to use shared helpers
+  - `Functions/Python.cs` — now uses `FileCache` and `ToolLogging<PythonTools>`.
+  - `Functions/Csharp.cs` — now uses `FileCache` and `ToolLogging<McpTools>`.
+  - `Functions/Vue3.cs` — now uses `FileCache` and `ToolLogging<Vue3Tools>`.
+- 2025-09-15 — Removed duplicated logger partial classes
+  - Removed the `*ToolsLogs` extension classes; logging is now centralized in `ToolLogging.cs`.
+- 2025-09-15 — Added TypeScript best-practices resource
+  - `Languages/Typescript/typescript-best-practices.md` — initial best-practices checklist (tsconfig, linting, tooling, conventions).
