@@ -39,6 +39,10 @@ The repository currently contains these language resources and corresponding MCP
   - Resource: `Languages/Php/php-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Php.cs`)
 
+- Ruby
+  - Resource: `Languages/Ruby/ruby-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Ruby.cs`)
+
 - Swift
   - Resource: `Languages/Swift/swift-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Swift.cs`)
