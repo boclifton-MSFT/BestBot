@@ -1,50 +1,45 @@
 ---
 name: Request a new language
-about: Suggest a new programming language to include in BestPracticesMcp. Provide required resources and info to make adding the language straightforward for maintainers.
+about: Request a new programming language for BestPracticesMcp. Choose to attach your own draft or ask Copilot to generate a first draft.
 title: "[Language request] %s"
 labels: enhancement, needs-triage
 assignees: ''
 ---
 
-Thank you for proposing a new language for BestPracticesMcp. To help maintainers evaluate and implement your request quickly, please provide the information below.
+Please use this form to propose a new language. Keep answers short so the issue is easy to scan on GitHub.
 
-### 1) Language
-- Language name: <!-- e.g. Rust, Go, Kotlin -->
-- Short description / ecosystem notes: <!-- Why this language should be included? -->
+## 1) Basic
+- Language name:
+- One-line reason to include this language:
 
-### 2) Proposed resource files (required)
-- Best-practices markdown (required): Languages/<Language>/<language>-best-practices.md
-  - Please attach a draft of the Markdown file or a link to a Gist/branch that contains it.
-  - Target length: ~100–250 lines. Focus on high-value guidance (idioms, tooling, testing, formatting, packaging, security, best libraries).
-- MCP tool file (required): Languages/<Language>/<Language>.cs (or Functions/<Language>Tools.cs)
-  - Provide a short skeleton or note if you want maintainers to create it. The MCP tool must return the markdown content to the MCP SSE endpoint.
+## 2) How you'd like to contribute
+- [ ] I will attach a draft best-practices Markdown file.
+- [ ] Please generate a first-draft Markdown for me (Copilot).
 
-> NOTE: When adding a language, the repository's Copilot automation requires the PR to also update the README to list the new language and the resource/tool paths. Please include a suggested README snippet if possible.
+If you checked "Please generate", give 2–4 bullets describing what to include (e.g. formatting, testing, packaging, security):
+- 
+- 
+- 
 
-### 3) Licensing & attribution
-- Is the content original, or does it include material from external sources? If external, include license and attribution details.
+Preferred length for generated draft: (choose one)
+- short (~100 lines) / medium (~150 lines) / long (~250 lines)
 
-### 4) Acceptance criteria / checklist
-- [ ] Draft best-practices markdown attached or linked
-- [ ] MCP tool skeleton or implementation attached or linked
-- [ ] Confirm license/attribution is compatible with this repository
-- [ ] Provide a suggested README.md entry with the resource path and tool path
-- [ ] Optional: links to example projects, CI, or tests demonstrating recommendations
+Preferred tone: practical / detailed / beginner-friendly / reference
 
-### 5) Validation steps for maintainers (suggested)
-Maintainers will typically do the following in the same PR that adds the language:
-- Add the Markdown file to Languages/<Language>/<language>-best-practices.md
-- Add the MCP tool to Languages/<Language>/<Language>.cs (or Functions/<Language>Tools.cs) following existing patterns
-- Update README.md "Included languages" section with the language and resource/tool paths
-- Run `dotnet build BestPracticesMcp.sln` and `dotnet format --verify-no-changes` to ensure the solution builds and is formatted
-- Verify the new resource is accessible via the MCP endpoint (local functions host or CI run)
+## 3) Licensing & attribution
+- Is the content original? (yes / no)
+- If no, list sources and license info or links:
 
-If you would like maintainers to implement the language for you, indicate that below and attach the content/resources. Maintainers will triage based on bandwidth and applicability.
+## 4) Submitter checklist (please complete before filing)
+- [ ] Chosen one of the contribution options in section 2
+- [ ] Confirmed license/attribution is compatible with this repo
+- [ ] Included a suggested README entry (or short sentence) listing the resource path and tool path
 
-### 6) Additional notes
-- If the language has multiple variants (e.g. Node/TypeScript), indicate which variant you are requesting.
-- If this is a translation of an existing entry, include original source and translator info.
+## 5) Maintainer acceptance checklist (for PR)
+- [ ] Add Markdown: Languages/<Language>/<language>-best-practices.md
+- [ ] Add MCP tool: Languages/<Language>/<Language>.cs (or Functions/<Language>Tools.cs) following existing patterns
+- [ ] Update README "Included languages" with language and resource/tool paths in the same PR
+- [ ] Run `dotnet build` and `dotnet format --verify-no-changes`
+- [ ] Verify the new resource is accessible via the MCP endpoint
 
----
-
-Thank you — a maintainer will triage this request once submitted.
+Thank you — a maintainer will triage this request. If you asked Copilot to generate a draft, please review the generated content for accuracy and licensing before merging.
