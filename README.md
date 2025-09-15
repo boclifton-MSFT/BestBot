@@ -39,6 +39,14 @@ The repository currently contains these language resources and corresponding MCP
   - Resource: `Languages/Go/go-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Go.cs`)
 
+- Flutter
+  - Resource: `Languages/Flutter/flutter-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Flutter.cs`)
+
+- Rust
+  - Resource: `Languages/Rust/rust-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Rust.cs`)
+
 ## Prerequisites
 
 - .NET 9 SDK (required)
