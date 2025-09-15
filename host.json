@@ -11,8 +11,8 @@
     },
     "extensions": {
         "mcp": {
-            "instructions": "Some test instructions on how to use the server",
-            "serverName": "C# Best Practices",
+            "instructions": "Connect an MCP client to the server SSE endpoint (example: http://<server>/runtime/webhooks/mcp/sse) and invoke tools named get_<language>_best_practices (e.g. get_python_best_practices). Each tool returns the markdown content for that language's best practices.",
+            "serverName": "Best Practices",
             "serverVersion": "1.0.0"
         }
     }

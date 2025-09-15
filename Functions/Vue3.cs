@@ -12,7 +12,7 @@ namespace BestPracticesMcp.Functions;
 /// This class is intended for internal use and is designed to be used within a function app context.
 /// It reads best practices from a markdown file and caches the content for a short duration.
 /// </remarks>
-public class Vue3Tools(ILogger<Vue3Tools> logger)
+internal class Vue3Tools(ILogger<Vue3Tools> logger)
 {
     [Function(nameof(GetVue3BestPractices))]
     public async Task<string> GetVue3BestPractices(

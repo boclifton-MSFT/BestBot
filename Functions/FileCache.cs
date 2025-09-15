@@ -18,7 +18,7 @@ namespace BestPracticesMcp.Functions;
 /// </summary>
 internal static class FileCache
 {
-    private class CacheEntry
+    private sealed class CacheEntry
     {
         public SemaphoreSlim Lock { get; } = new(1, 1);
         public string? Content;

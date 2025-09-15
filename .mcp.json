@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "github": {
+      "url": "https://api.githubcopilot.com/mcp/"
+    },
+    "bestpractice-local": {
+      "url": "http://localhost:7160/runtime/webhooks/mcp/sse",
+      "type": "sse"
+    }
+  }
+}

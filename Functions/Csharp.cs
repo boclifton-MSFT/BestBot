@@ -12,7 +12,7 @@ namespace BestPracticesMcp.Functions;
 /// This class is intended for internal use and is designed to be used within a function app context.
 /// It reads best practices from a markdown file and caches the content for a short duration.
 /// </remarks>
-public class McpTools(ILogger<McpTools> logger)
+internal class CsharpTools(ILogger<CsharpTools> logger)
 {
     [Function(nameof(GetCsharpBestPractices))]
     public async Task<string> GetCsharpBestPractices(
@@ -20,14 +20,14 @@ public class McpTools(ILogger<McpTools> logger)
             ToolInvocationContext toolContext,
         CancellationToken cancellationToken)
     {
-        ToolLogging<McpTools>.Serving(logger, "get_csharp_best_practices");
+        ToolLogging<CsharpTools>.Serving(logger, "get_csharp_best_practices");
 
         var filePath = Path.Combine(AppContext.BaseDirectory, "Resources", "csharp-best-practices.md");
 
         // Fast-path: serve from cache if valid
         if (FileCache.TryGetValid(filePath, out var cached))
         {
-            ToolLogging<McpTools>.ServingCached(logger, filePath);
+            ToolLogging<CsharpTools>.ServingCached(logger, filePath);
             return cached!;
         }
 
@@ -35,14 +35,14 @@ public class McpTools(ILogger<McpTools> logger)
         {
             var content = await FileCache.GetOrLoadAsync(filePath, TimeSpan.FromMinutes(5), async () =>
             {
-                ToolLogging<McpTools>.Loading(logger, filePath);
+                ToolLogging<CsharpTools>.Loading(logger, filePath);
                 return await File.ReadAllTextAsync(filePath, cancellationToken).ConfigureAwait(false);
             }, cancellationToken).ConfigureAwait(false);
 
             if (content is not null)
                 return content;
 
-            ToolLogging<McpTools>.FileNotFound(logger, filePath);
+            ToolLogging<CsharpTools>.FileNotFound(logger, filePath);
         }
         catch (OperationCanceledException)
         {
@@ -51,15 +51,15 @@ public class McpTools(ILogger<McpTools> logger)
         }
         catch (IOException ex)
         {
-            ToolLogging<McpTools>.FailedToLoad(logger, ex);
+            ToolLogging<CsharpTools>.FailedToLoad(logger, ex);
         }
         catch (UnauthorizedAccessException ex)
         {
-            ToolLogging<McpTools>.FailedToLoad(logger, ex);
+            ToolLogging<CsharpTools>.FailedToLoad(logger, ex);
         }
         catch (NotSupportedException ex)
         {
-            ToolLogging<McpTools>.FailedToLoad(logger, ex);
+            ToolLogging<CsharpTools>.FailedToLoad(logger, ex);
         }
 
         string[] fallback = new[]
