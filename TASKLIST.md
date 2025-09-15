@@ -1,61 +1,63 @@
-# TASKLIST
+# TASKS.md
 
 Last updated: 2025-09-15
 
-This document records completed work, immediate validation steps, and a prioritized backlog for the BestPracticesMcp project. Tasks are organized into phases so the team can quickly see what is done, what to do next, and what we might do later.
+## Project Implementation Plan
 
-## Next Up (priority)
+1. **Initial Setup & Research**
+   - [ ] **Review** existing documentation and requirements (README, TASKS/TASKLIST, source files under `Languages/`).
+   - [ ] **Identify** key technologies and dependencies (`.NET 9`, Azure Functions v4, MCP extension).
+   - [ ] **Setup** development environment and version control (local `dotnet` toolchain, `local.settings.json`).
 
-These are the highest-priority, near-term tasks. Aim to complete these in the next 1–2 sprints.
+2. **Architecture & Design**
+   - [ ] **Draft** high-level architecture diagrams showing Functions, shared utilities, and resource files in `Languages/`.
+   - [ ] **Define** responsibilities for shared utilities (`Utilities/FileCache.cs`, `Utilities/ToolLogging.cs`).
+   - [ ] **Design** API contracts for MCP tools (per-language tool endpoints and payloads).
 
-- 2025-09-15 — Validate build and formatting (Immediate)
-  - Run: `dotnet restore` then `dotnet build BestPracticesMcp.sln` and `dotnet format BestPracticesMcp.sln --verify-no-changes`.
-- 2025-09-18 — Add MCP tool class for TypeScript (planned)
-  - Implement `Functions/TypescriptTools.cs` following existing tool patterns so the TypeScript content is served via MCP endpoints.
-- 2025-09-22 — CI pipeline: build + format + (future) tests
-  - Add GitHub Actions workflow to run `dotnet build`, `dotnet format --verify-no-changes`, and test steps when tests exist.
-- 2025-09-29 — Add unit and integration tests for caching and file serving
-  - Create tests that validate `FileCache` behavior (TTL, concurrency) and tool endpoints that serve resources.
-- 2025-09-15 — Add Java best-practices resource and MCP tool (in progress)
-  - `Languages/Java/java-best-practices.md` — curated best-practices collated from Oracle, OpenJDK, and Google Java Style Guide.
-  - `Languages/Java/Java.cs` — MCP tool `get_java_best_practices` added and configured to use `FileCache` and `ToolLogging<JavaTools>`.
+3. **Core Components Development**
+   - [ ] **Implement** MCP tool classes for each language
+     - [ ] Create `Functions/Csharp.cs`, `Functions/Python.cs`, `Functions/Vue3.cs`, `Functions/TypescriptTools.cs`, `Functions/Java.cs` as needed.
+     - [ ] Ensure each tool uses `Utilities/FileCache.cs` for resource caching and `Utilities/ToolLogging<T>` for logging.
+     - [ ] Add resource markdown files under `Languages/<Lang>/<lang>-best-practices.md`.
+   - [ ] **Add** unit and integration tests for caching and endpoints
+     - [ ] Validate TTL behavior, concurrency, and file-change detection.
 
-## Future (Not Planned)
+4. **Integration & Configuration**
+   - [ ] **Develop** integration between MCP tools and shared utilities; remove duplicated or deprecated logger classes.
+   - [ ] **Configure** environment variables and local settings (`local.settings.json`) for local Functions host development.
+   - [ ] **Setup** sample MCP client configuration in `.vscode/mcp.json` for local testing.
 
-Ideas and lower-priority items to pursue when time and resources permit.
+5. **Azure Service Integration**
+   - [ ] **Implement** IaC under `infra/` (Bicep templates like `main.bicep` and parameter files).
+   - [ ] **Configure** authentication and managed identity where needed for production endpoints.
+   - [ ] **Test** deployments using `azd up` or equivalent `az`+deploy steps; ensure `azure.yaml` exists if using `azd`.
 
-- Add best-practices content for additional languages (one item per language):
-  - Java — resources: Oracle docs, OpenJDK, Google Java Style Guide
-  - Go — resources: go.dev docs, Effective Go
-  - Rust — resources: Rust book, API guidelines
-  - Kotlin — resources: kotlinlang docs and coding conventions
-- Add MCP tool implementations for the above languages (create `Functions/<Lang>Tools.cs`).
-- Provide example MCP client configurations and validation scripts in `.vscode/`.
-- Add PR templates and contributing workflow automation (branch naming, changelogs, labels).
-- Add Azure deployment smoke tests and post-deploy verification steps.
+6. **Testing & Quality Assurance**
+   - [ ] **Create** CI pipeline (GitHub Actions) to run: `dotnet restore`, `dotnet build`, `dotnet format --verify-no-changes`, and tests.
+   - [ ] **Perform** end-to-end testing locally using Azure Functions Core Tools when available.
+   - [ ] **Verify** system meets formatting and build requirements before merging PRs.
 
-## Notes and conventions
+7. **Documentation & Handover**
+   - [ ] **Update** project README with setup instructions and local run steps.
+   - [ ] **Create** short guides for adding new language resources and MCP tools.
+   - [ ] **Document** architecture decisions and locations of shared utilities.
 
-- Dates are YYYY-MM-DD and indicate the date the task was completed or planned.
-- Update this file whenever you complete a task or reprioritize work. Keep completed items concise and link to files changed.
-- For immediate help, open an issue or ping the repository owner.
-- 
-- Note: `FileCache.cs` and `ToolLogging.cs` were moved from `Functions/` to `Utilities/` on 2025-09-15. Update any references if you relied on the old paths.
+8. **Deployment & Release Planning**
+   - [ ] **Finalize** deployment strategy and post-deploy validation (Application Insights, logs).
+   - [ ] **Create** CI/CD pipeline to automate builds and deploy to target Azure environment.
+   - [ ] **Prepare** release notes and changelog entries.
 
-## Completed
+## Advanced Features (Phase 2)
 
-- 2025-09-15 — Added centralized logging helpers
-  - `Utilities/ToolLogging.cs` — single source-generated LoggerMessage partial and `ToolLogging<T>` wrapper for per-tool loggers.
-- 2025-09-15 — Added shared file caching implementation
-  - `Utilities/FileCache.cs` — process-wide, per-path cache with per-entry semaphore locking and TTL support.
-- 2025-09-15 — Refactored existing tools to use shared helpers
-  - `Functions/Python.cs` — now uses `FileCache` and `ToolLogging<PythonTools>`.
-  - `Functions/Csharp.cs` — now uses `FileCache` and `ToolLogging<McpTools>`.
-  - `Functions/Vue3.cs` — now uses `FileCache` and `ToolLogging<Vue3Tools>`.
-- 2025-09-15 — Removed duplicated logger partial classes
-  - Removed the `*ToolsLogs` extension classes; logging is now centralized in `ToolLogging.cs`.
-- 2025-09-15 — Added TypeScript best-practices resource
-  - `Languages/Typescript/typescript-best-practices.md` — initial best-practices checklist (tsconfig, linting, tooling, conventions).
-- 2025-09-15 — Added Java best-practices resource and MCP tool (in progress)
-  - `Languages/Java/java-best-practices.md` — synthesized from Oracle, OpenJDK, and Google Java Style Guide.
-  - `Languages/Java/Java.cs` — MCP tool `get_java_best_practices` implemented; caches file for 5 minutes.
+- [ ] **Expand** best-practices content to more languages (Go, Rust, Kotlin, etc.).
+  - [ ] **Design** per-language resource and tool contract.
+  - [ ] **Implement** tooling and tests for new language entries.
+- [ ] **Add** sample MCP client apps and automated validation scripts.
+- [ ] **Provide** templates for contributing guidelines, PR checks, and labeling automation.
+
+## Discovered During Work
+
+- [ ] Consolidate logging helpers: ensure `Utilities/ToolLogging.cs` is the single source of truth and remove old `*ToolsLogs` classes.
+- [ ] Add unit tests for `Utilities/FileCache.cs` (TTL, concurrency, and file-watching behavior).
+- [ ] Create GitHub Actions workflows for build/format/test and add required secrets/pipeline configuration.
+- [ ] Add instructions for local development without Azure Functions Core Tools (how to validate business logic using `bin/Debug/net9.0/Resources/`).
