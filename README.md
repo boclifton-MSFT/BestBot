@@ -11,6 +11,30 @@ This repository is aimed at developers who want to contribute canonical best-pra
 - Centralized, source-generated logging surface using `ToolLogging<T>` for consistent event messages across tools.
 - Simple, extensible pattern for adding more language tools.
 
+## Included languages
+
+The repository currently contains these language resources and corresponding MCP tool patterns:
+
+- C#
+  - Resource: `Languages/Csharp/csharp-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Csharp.cs`)
+
+- Python
+  - Resource: `Languages/Python/python-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Python.cs`)
+
+- Vue 3
+  - Resource: `Languages/Vue3/vue3-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Vue3.cs`)
+
+- TypeScript
+  - Resource: `Languages/Typescript/typescript-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (add `Functions/TypescriptTools.cs` when implementing)
+
+- Java
+  - Resource: `Languages/Java/java-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Java.cs`)
+
 ## Prerequisites
 
 - .NET 9 SDK (required)
@@ -34,7 +58,6 @@ This repository is aimed at developers who want to contribute canonical best-pra
 - `Resources/` — Markdown files containing best-practice guidance (one file per language/framework).
 - `Tools/` — shared helpers (logging, caching) live under `Functions/` for now.
 - `infra/` — Bicep templates for Azure deployment (used by `azd` when deploying).
-
 ## Adding a new language
 
 To add another language's best-practices follow the repository's current layout and helper conventions:

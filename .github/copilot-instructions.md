@@ -153,5 +153,6 @@ After successful deployment:
 3. **Caching**: Functions implement in-memory caching with file modification checking
 4. **Authentication**: Uses managed identity for Azure resources, function keys for endpoints
 5. **Monitoring**: Application Insights configured for telemetry and performance monitoring
+6. **Documentation sync requirement (COPILOT)**: When a new language resource or MCP tool is added to the repository, Copilot (the automated contributor agent) MUST update `README.md` to include the new language in the "Included languages" section and add the resource path (e.g. `Languages/<Language>/<language>-best-practices.md`) and the expected MCP tool path (e.g. `Functions/<Language>Tools.cs`). This update should be included in the same PR that introduces the language to the codebase.
 
 Always build and validate your changes using the commands above before committing. The CI/CD pipeline expects properly formatted, buildable code.
