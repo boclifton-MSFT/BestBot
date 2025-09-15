@@ -35,6 +35,10 @@ The repository currently contains these language resources and corresponding MCP
   - Resource: `Languages/Java/java-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Java.cs`)
 
+- Elixir
+  - Resource: `Languages/Elixir/elixir-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Elixir.cs`)
+
 ## Prerequisites
 
 - .NET 9 SDK (required)
