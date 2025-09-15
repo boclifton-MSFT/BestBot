@@ -2,6 +2,11 @@
 
 A comprehensive guide to writing clean, secure, and maintainable PHP code. These practices are based on PHP-FIG standards, community recommendations, and modern PHP development patterns.
 
+## Sources
+- PHP Manual — https://www.php.net/manual/en/
+- PHP-FIG (Framework Interop Group) — https://www.php-fig.org/
+- PSR Standards — https://www.php-fig.org/psr/
+
 ## Quick Checklist
 
 - Follow PSR-1, PSR-2, and PSR-12 coding standards for consistent formatting and style.
