@@ -22,7 +22,7 @@ builder.Services.AddSingleton<IOptionsSnapshot<ToolOptions>>(sp =>
 builder.Build().Run();
 
 // Workaround: The MCP preview extension tries to resolve IOptionsSnapshot<ToolOptions>
-// from the root provider. In .NET 8+ this throws. Adapt snapshot from monitor as singleton.
+// from the root provider. In .NET 9+ this throws. Adapt snapshot from monitor as singleton.
 internal sealed class OptionsSnapshotFromMonitor<T> : IOptionsSnapshot<T> where T : class
 {
     private readonly IOptionsMonitor<T> _monitor;

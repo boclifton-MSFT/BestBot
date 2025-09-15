@@ -13,7 +13,7 @@ This repository is aimed at developers who want to contribute canonical best-pra
 
 ## Prerequisites
 
-- .NET 8 SDK (required)
+- .NET 9 SDK (required)
 - (Optional) Azure Functions Core Tools for local function host testing
 
 ## Quick start (developer)

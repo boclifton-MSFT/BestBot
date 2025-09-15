@@ -2,14 +2,14 @@
 
 **ALWAYS reference these instructions first and only fallback to search or additional commands when information here is incomplete or errors occur.**
 
-BestPracticesMcp is an Azure Functions application (C# .NET 8) that serves as an MCP (Model Context Protocol) server. It provides best practices guidance for C#, Python, and Vue 3 development through cached markdown content served via Azure Functions with MCP extension.
+BestPracticesMcp is an Azure Functions application (C# .NET 9) that serves as an MCP (Model Context Protocol) server. It provides best practices guidance for C#, Python, and Vue 3 development through cached markdown content served via Azure Functions with MCP extension.
 
 ## Working Effectively
 
 ### Bootstrap and Build
 **CRITICAL**: Use exact timeout values. NEVER CANCEL builds or long-running commands.
 
-1. **Prerequisites**: .NET 8 SDK is required and available
+1. **Prerequisites**: .NET 9 SDK is required and available
 2. **Dependencies**: 
    ```bash
    dotnet restore BestPractices.sln
@@ -54,7 +54,7 @@ BestPracticesMcp is an Azure Functions application (C# .NET 8) that serves as an
 
 **Alternative Testing**: You can validate the core business logic (file access and content serving) without the full Functions runtime:
 1. Build the project: `dotnet build BestPractices.sln`
-2. Resources are automatically copied to `bin/Debug/net8.0/Resources/`
+2. Resources are automatically copied to `bin/Debug/net9.0/Resources/`
 3. Core functionality accesses files from `AppContext.BaseDirectory + "Resources/{file}.md"`
 
 **Local Settings Required**: Create `local.settings.json` for local development:
@@ -64,7 +64,7 @@ BestPracticesMcp is an Azure Functions application (C# .NET 8) that serves as an
   "Values": {
     "AzureWebJobsStorage": "DefaultEndpointsProtocol=https;AccountName=devstoreaccount1;AccountKey=Eby8vdM02xNOcqFlqUwJPLlmEtlCDXJ1OUzFT50uSRZ6IFsuFq2UVErCz4I6tq/K1SZFPTOtr/KBHBeksoGMGw==;BlobEndpoint=http://127.0.0.1:10000/devstoreaccount1;QueueEndpoint=http://127.0.0.1:10001/devstoreaccount1;TableEndpoint=http://127.0.0.1:10002/devstoreaccount1;",
     "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
-    "FUNCTIONS_INPROC_NET8_ENABLED": "1"
+    "FUNCTIONS_INPROC_NET9_ENABLED": "1"
   }
 }
 ```
@@ -120,7 +120,7 @@ After successful deployment:
 ```
 .
 ├── BestPractices.sln              # Solution file
-├── BestPracticesMcp.csproj        # Main project file (.NET 8, Azure Functions v4)
+├── BestPracticesMcp.csproj        # Main project file (.NET 9, Azure Functions v4)
 ├── Program.cs                     # Application entry point with MCP configuration
 ├── Csharp.cs                      # C# best practices MCP tool
 ├── Python.cs                     # Python best practices MCP tool  
@@ -135,7 +135,7 @@ After successful deployment:
 ```
 
 ### Key Project Details
-- **Target Framework**: .NET 8
+- **Target Framework**: .NET 9
 - **Azure Functions Version**: v4
 - **Runtime**: dotnet-isolated
 - **MCP Extension**: Microsoft.Azure.Functions.Worker.Extensions.Mcp v1.0.0-preview.6
