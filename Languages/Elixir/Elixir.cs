@@ -10,9 +10,9 @@ namespace BestPracticesMcp.Functions;
 internal class ElixirTools(ILogger<ElixirTools> logger)
 {
     [Function(nameof(GetElixirBestPractices))]
-    public async Task<string> GetElixirBestPractices([
-        McpToolTrigger("get_elixir_best_practices", "Retrieves best practices for the Elixir programming language")]
-        ToolInvocationContext toolContext, CancellationToken cancellationToken)
+    public async Task<string> GetElixirBestPractices(
+        [McpToolTrigger("get_elixir_best_practices", "Retrieves best practices for the Elixir programming language")]
+            ToolInvocationContext toolContext, CancellationToken cancellationToken)
     {
         ToolLogging<ElixirTools>.Serving(logger, "get_elixir_best_practices");
 
