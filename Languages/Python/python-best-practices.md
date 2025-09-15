@@ -30,3 +30,5 @@ A concise, opinionated checklist for writing maintainable, readable, and Pythoni
 - PEP 8 (style guide): https://peps.python.org/pep-0008/
 - Packaging Guide: https://packaging.python.org/
 - Type hints / typing docs: https://docs.python.org/3/library/typing.html
+- Testing guidance (pytest): https://docs.pytest.org/
+- Security guidance (OWASP Python): https://cheatsheetseries.owasp.org/cheatsheets/Python_Cheat_Sheet.html

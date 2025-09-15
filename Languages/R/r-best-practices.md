@@ -290,9 +290,10 @@ safe_divide <- function(x, y) {
 
 ## Resources
 
-- [R Manuals (CRAN)](https://cran.r-project.org/manuals.html)
-- [R Documentation and Manuals](https://www.r-project.org/other-docs.html)
-- [Advanced R by Hadley Wickham](https://adv-r.hadley.nz/)
-- [R Packages by Hadley Wickham](https://r-pkgs.org/)
-- [Google's R Style Guide](https://google.github.io/styleguide/Rguide.html)
-- [Tidyverse Style Guide](https://style.tidyverse.org/)
+- R Manuals (CRAN): https://cran.r-project.org/manuals.html
+- R project documentation: https://www.r-project.org/other-docs.html
+- Advanced R (Hadley Wickham): https://adv-r.hadley.nz/
+- R Packages (Hadley Wickham): https://r-pkgs.org/
+- Google's R Style Guide: https://google.github.io/styleguide/Rguide.html
+- Tidyverse Style Guide: https://style.tidyverse.org/
+- Testing with testthat: https://testthat.r-lib.org/

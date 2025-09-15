@@ -38,6 +38,10 @@ Provide one URL per line (official docs, language website, RFCs, major style gui
      - Recommended libraries (1–2 per common need)
      - Minimal example (hello world + brief build/test CI snippet)
      - Further reading: include any provided authoritative URLs
+     - **Resources (REQUIRED)**: A top-level `## Resources` section that includes a bullet list of canonical web-accessible URLs (full https:// links). The Resources section MUST include at minimum the official language docs, core style or design guidelines, recommended analyzer/linter pages (if applicable), testing/CI guidance URL, and security guidance URL when available. Format rules for the Resources section:
+       - Each resource must be a single bullet line starting with `- ` followed by the resource title and the full URL.
+       - URLs must be directly accessible (no placeholders) and use HTTPS.
+       - Keep entries concise; avoid long descriptive paragraphs in this section so automation can parse URLs easily.
    - Attribute sources and include brief license/attribution notes where needed.
 3) Add a C# MCP tool at: Languages/<Language>/<Language>.cs
    - Tool must expose the markdown content via the MCP SSE endpoint, matching existing patterns in the repo.

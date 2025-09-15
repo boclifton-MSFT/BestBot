@@ -168,6 +168,8 @@ def area(radius), do: :math.pi() * radius * radius
 - HexDocs: https://hexdocs.pm/
 - Elixir Style Guide: https://github.com/christopheradams/elixir_style_guide
 - OTP Design Principles: https://erlang.org/doc/design_principles/des_princ.html
+- Testing with ExUnit docs: https://hexdocs.pm/ex_unit/
+- Security guidance for Elixir/Erlang: https://erlang.org/doc/security
 
 ---
 

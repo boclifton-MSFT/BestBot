@@ -25,5 +25,7 @@ A concise, opinionated checklist for writing maintainable, reliable, and perform
 
 - Vue 3 Guide: https://vuejs.org/guide/introduction.html
 - Vue Router: https://router.vuejs.org/
-- Vuex / Pinia: https://pinia.vuejs.org/
+- Pinia (state management): https://pinia.vuejs.org/
 - Composition API docs: https://vuejs.org/guide/extras/composition-api-faq.html
+- Testing guidance (Vue Test Utils): https://vue-test-utils.vuejs.org/
+- Security guidance (OWASP front-end): https://cheatsheetseries.owasp.org/cheatsheets/DOM_based_XSS_Prevention_Cheat_Sheet.html

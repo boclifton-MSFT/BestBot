@@ -349,6 +349,8 @@ flutter build apk --release
 - Flutter docs: https://docs.flutter.dev/
 - Dart language guide: https://dart.dev/guides
 - Pub.dev (packages): https://pub.dev/
+- Flutter testing docs: https://docs.flutter.dev/guides/testing
+- Security guidance for Flutter/Dart: https://cheatsheetseries.owasp.org/cheatsheets/Mobile_App_Security_Cheat_Sheet.html
 
 ---
 

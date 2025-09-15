@@ -355,3 +355,5 @@ This guide focuses on vanilla JavaScript fundamentals. For framework-specific be
 - ECMAScript specification: https://tc39.es/ecma262/
 - ESLint: https://eslint.org/
 - JavaScript.info: https://javascript.info/
+- Testing (Jest): https://jestjs.io/docs/getting-started
+- Security guidance (OWASP Node.js cheat sheet): https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html

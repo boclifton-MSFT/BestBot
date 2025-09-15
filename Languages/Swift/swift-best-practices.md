@@ -214,6 +214,8 @@ swiftlint lint
 - Swift.org documentation: https://docs.swift.org/swift-book/
 - Swift API Design Guidelines: https://swift.org/documentation/api-design-guidelines/
 - Swift Package Manager docs: https://docs.swift.org/package-manager/
+- Testing guidance (XCTest): https://developer.apple.com/documentation/xctest
+- Security guidance (Apple platform security): https://developer.apple.com/security/
 
 ---
 

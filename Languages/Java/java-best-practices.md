@@ -62,4 +62,6 @@ Minimal Fallback (if file unavailable)
 - OpenJDK Guide: https://openjdk.org/guide/
 - Google Java Style Guide: https://google.github.io/styleguide/javaguide.html
 - Effective Java (Joshua Bloch): https://www.pearson.com/
+- Testing guidance (JUnit): https://junit.org/junit5/docs/current/user-guide/
+- Security guidance for Java: https://cheatsheetseries.owasp.org/cheatsheets/Java_Security_Cheat_Sheet.html
 

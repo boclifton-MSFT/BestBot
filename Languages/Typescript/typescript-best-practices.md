@@ -110,7 +110,8 @@ A concise, opinionated checklist for writing maintainable, type-safe, and scalab
 - Prettier: https://prettier.io/
 - Incremental builds & project references: https://www.typescriptlang.org/tsconfig#projectReferences
 - Runtime type-validation (examples): Zod (https://github.com/colinhacks/zod), io-ts (https://github.com/gcanti/io-ts)
-
+- Testing guidance (Jest): https://jestjs.io/docs/getting-started
+- Security guidance (Node.js/TypeScript): https://cheatsheetseries.owasp.org/cheatsheets/Nodejs_Security_Cheat_Sheet.html
 
 ---
 

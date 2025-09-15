@@ -179,3 +179,6 @@ tasks.test {
 - Kotlin docs: https://kotlinlang.org/docs/
 - Kotlin coding conventions: https://kotlinlang.org/docs/coding-conventions.html
 - Coroutines Guide: https://kotlinlang.org/docs/coroutines-guide.html
+- Android Kotlin Style Guide: https://developer.android.com/kotlin/style-guide
+- Testing guidance (Kotlin/JUnit): https://junit.org/junit5/docs/current/user-guide/
+- Security guidance for Kotlin/Java: https://cheatsheetseries.owasp.org/cheatsheets/Java_Security_Cheat_Sheet.html

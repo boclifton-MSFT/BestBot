@@ -217,3 +217,5 @@ ctest
 - cppreference: https://en.cppreference.com/
 - Google C++ Style Guide: https://google.github.io/styleguide/cppguide.html
 - vcpkg: https://github.com/microsoft/vcpkg
+- GoogleTest (testing): https://github.com/google/googletest
+- CERT C++ Secure Coding Standard: https://wiki.sei.cmu.edu/confluence/display/cplusplus/SEI+CERT+C%2B%2B+Coding+Standard

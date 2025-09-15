@@ -187,3 +187,5 @@ cargo clippy
 - The Rust Book: https://doc.rust-lang.org/book/
 - Rust docs and API: https://doc.rust-lang.org/
 - Clippy: https://github.com/rust-lang/rust-clippy
+- Testing guidance (cargo test): https://doc.rust-lang.org/cargo/commands/cargo-test.html
+- Security guidance for Rust: https://cheatsheetseries.owasp.org/cheatsheets/Rust_Security_Cheat_Sheet.html

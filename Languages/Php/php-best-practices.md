@@ -126,6 +126,8 @@ A comprehensive guide to writing clean, secure, and maintainable PHP code. These
 - PHP Manual: https://www.php.net/manual/en/
 - PHP-FIG / PSR standards: https://www.php-fig.org/
 - Composer: https://getcomposer.org/
+- Testing with PHPUnit: https://phpunit.de/
+- Security best practices (OWASP PHP): https://cheatsheetseries.owasp.org/cheatsheets/PHP_Security_Cheat_Sheet.html
 
 Minimal Fallback (if file unavailable)
 - Follow PSR standards for consistent code style

@@ -264,6 +264,8 @@ jobs:
 - Effective Go: https://go.dev/doc/effective_go
 - Go docs and spec: https://go.dev/doc/
 - Go by Example: https://gobyexample.com/
+- Testing guidance (go test): https://go.dev/doc/testing
+- Security guidance for Go: https://cheatsheetseries.owasp.org/cheatsheets/Go_Security_Cheat_Sheet.html
 
 ## Attribution
 

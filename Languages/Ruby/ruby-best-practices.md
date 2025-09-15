@@ -120,3 +120,5 @@ A concise, opinionated checklist for writing maintainable, readable, and idiomat
 - Ruby documentation: https://www.ruby-lang.org/en/documentation/
 - Ruby Style Guide: https://rubystyle.guide/
 - RuboCop: https://rubocop.org/
+- Testing guidance (RSpec): https://rspec.info/documentation/
+- Security guidance for Ruby/Rails: https://cheatsheetseries.owasp.org/cheatsheets/Ruby_on_Rails_Security_Cheat_Sheet.html
