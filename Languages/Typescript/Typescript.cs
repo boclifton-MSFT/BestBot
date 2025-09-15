@@ -1,10 +1,12 @@
+using BestPracticesMcp.Utilities;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Extensions.Mcp;
 using Microsoft.Extensions.Logging;
-using BestPracticesMcp.Utilities;
 
 namespace BestPracticesMcp.Functions;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1852:Type can be sealed", Justification = "Instantiated by Functions host via reflection; suppress analyzer to avoid sealing suggestion")]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by Functions host via reflection")]
 internal class TypescriptTools(ILogger<TypescriptTools> logger)
 {
     [Function(nameof(GetTypescriptBestPractices))]

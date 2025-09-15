@@ -1,23 +1,23 @@
+using BestPracticesMcp.Utilities;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Extensions.Mcp;
 using Microsoft.Extensions.Logging;
-using BestPracticesMcp.Utilities;
 
 namespace BestPracticesMcp.Functions;
 
-public class PythonTools(ILogger<PythonTools> logger)
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1852:Type can be sealed", Justification = "Instantiated by Functions host via reflection; suppress analyzer to avoid sealing suggestion")]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by Functions host via reflection")]
+internal class PythonTools(ILogger<PythonTools> logger)
 {
     [Function(nameof(GetPythonBestPractices))]
     public async Task<string> GetPythonBestPractices(
-        [McpToolTrigger("get_python_best_practices", "Retrieves best practices for Python development")]
-            ToolInvocationContext toolContext,
-        CancellationToken cancellationToken)
+        [McpToolTrigger("get_python_best_practices", "Retrieves best practices for the Python programming language")]
+            ToolInvocationContext toolContext, CancellationToken cancellationToken)
     {
         ToolLogging<PythonTools>.Serving(logger, "get_python_best_practices");
 
         var filePath = Path.Combine(AppContext.BaseDirectory, "Languages", "Python", "python-best-practices.md");
 
-        // Fast-path: serve from cache if valid
         if (FileCache.TryGetValid(filePath, out var cached))
         {
             ToolLogging<PythonTools>.ServingCached(logger, filePath);
@@ -26,7 +26,6 @@ public class PythonTools(ILogger<PythonTools> logger)
 
         try
         {
-            // Attempt to load and cache the file (loader emits the "Loading" log)
             var content = await FileCache.GetOrLoadAsync(filePath, TimeSpan.FromMinutes(5), async () =>
             {
                 ToolLogging<PythonTools>.Loading(logger, filePath);
@@ -40,7 +39,6 @@ public class PythonTools(ILogger<PythonTools> logger)
         }
         catch (OperationCanceledException)
         {
-            // Propagate cancellation so the host can stop gracefully
             throw;
         }
         catch (IOException ex)
@@ -59,16 +57,12 @@ public class PythonTools(ILogger<PythonTools> logger)
         string[] fallback = new[]
         {
             "# Python Best Practices",
-            "- Follow PEP 8 style guidelines; use automated formatters.",
-            "- Write self-documenting code with clear, descriptive names.",
-            "- Use type hints for function signatures and complex data structures.",
-            "- Prefer list/dict comprehensions and generators for readability.",
-            "- Handle exceptions explicitly; use specific exception types.",
-            "- Write docstrings for modules, classes, and public functions.",
-            "- Use virtual environments and pin dependencies with requirements files.",
-            "- Follow the principle of least surprise; be explicit rather than implicit.",
-            "- Write unit tests with meaningful assertions and good coverage.",
-            "- Use logging instead of print statements for debugging and monitoring."
+            "- Follow PEP 8 formatting; use a formatter (black) and enforce in CI.",
+            "- Type-check with mypy where feasible; prefer gradual typing.",
+            "- Write unit tests that run fast and are deterministic.",
+            "- Use virtual environments (venv) or environment managers and pin dependencies.",
+            "- Avoid mutable default arguments; prefer None + sentinel logic.",
+            "- Use context managers for resource management (with statements)."
         };
         return string.Join(Environment.NewLine, fallback);
     }

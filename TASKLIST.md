@@ -16,6 +16,9 @@ These are the highest-priority, near-term tasks. Aim to complete these in the ne
   - Add GitHub Actions workflow to run `dotnet build`, `dotnet format --verify-no-changes`, and test steps when tests exist.
 - 2025-09-29 — Add unit and integration tests for caching and file serving
   - Create tests that validate `FileCache` behavior (TTL, concurrency) and tool endpoints that serve resources.
+- 2025-09-15 — Add Java best-practices resource and MCP tool (in progress)
+  - `Languages/Java/java-best-practices.md` — curated best-practices collated from Oracle, OpenJDK, and Google Java Style Guide.
+  - `Languages/Java/Java.cs` — MCP tool `get_java_best_practices` added and configured to use `FileCache` and `ToolLogging<JavaTools>`.
 
 ## Future (Not Planned)
 
@@ -53,3 +56,6 @@ Ideas and lower-priority items to pursue when time and resources permit.
   - Removed the `*ToolsLogs` extension classes; logging is now centralized in `ToolLogging.cs`.
 - 2025-09-15 — Added TypeScript best-practices resource
   - `Languages/Typescript/typescript-best-practices.md` — initial best-practices checklist (tsconfig, linting, tooling, conventions).
+- 2025-09-15 — Added Java best-practices resource and MCP tool (in progress)
+  - `Languages/Java/java-best-practices.md` — synthesized from Oracle, OpenJDK, and Google Java Style Guide.
+  - `Languages/Java/Java.cs` — MCP tool `get_java_best_practices` implemented; caches file for 5 minutes.

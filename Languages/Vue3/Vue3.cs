@@ -1,15 +1,17 @@
+using BestPracticesMcp.Utilities;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Extensions.Mcp;
 using Microsoft.Extensions.Logging;
-using BestPracticesMcp.Utilities;
 
 namespace BestPracticesMcp.Functions;
 
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1852:Type can be sealed", Justification = "Instantiated by Functions host via reflection; suppress analyzer to avoid sealing suggestion")]
+[System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by Functions host via reflection")]
 internal class Vue3Tools(ILogger<Vue3Tools> logger)
 {
     [Function(nameof(GetVue3BestPractices))]
     public async Task<string> GetVue3BestPractices(
-        [McpToolTrigger("get_vue3_best_practices", "Retrieves best practices for Vue 3 development")]
+        [McpToolTrigger("get_vue3_best_practices", "Retrieves best practices for building apps with Vue 3")]
             ToolInvocationContext toolContext,
         CancellationToken cancellationToken)
     {
@@ -58,14 +60,11 @@ internal class Vue3Tools(ILogger<Vue3Tools> logger)
         string[] fallback = new[]
         {
             "# Vue 3 Best Practices",
-            "- Use multi-word component names to avoid conflicts.",
-            "- Define detailed prop types with validation.",
-            "- Always use :key with v-for for predictable rendering.",
-            "- Avoid v-if with v-for on the same element.",
-            "- Use component-scoped styling (scoped CSS or CSS modules).",
-            "- Prefer Composition API for better TypeScript support.",
-            "- Keep template expressions simple; use computed properties for complex logic.",
-            "- Follow consistent component naming and file organization."
+            "- Prefer composition API for new components; keep components small and focused.",
+            "- Use script setup syntax for concise single-file components when appropriate.",
+            "- Organize state using composables or a lightweight store (Pinia).",
+            "- Write component-level unit tests and end-to-end tests for critical flows.",
+            "- Use linters/formatters (eslint + prettier) and enforce in CI."
         };
         return string.Join(Environment.NewLine, fallback);
     }

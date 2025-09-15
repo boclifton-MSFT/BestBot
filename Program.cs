@@ -36,7 +36,7 @@ internal sealed class OptionsSnapshotFromMonitor<T> : IOptionsSnapshot<T> where 
 }
 
 // Register the adapter for ToolOptions
-public partial class Program
+internal partial class Program
 {
     static Program()
     {
