@@ -43,6 +43,10 @@ The repository currently contains these language resources and corresponding MCP
   - Resource: `Languages/Ruby/ruby-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Ruby.cs`)
 
+- Elixir
+  - Resource: `Languages/Elixir/elixir-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Elixir.cs`)
+
 - Swift
   - Resource: `Languages/Swift/swift-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Swift.cs`)
