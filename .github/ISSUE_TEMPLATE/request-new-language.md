@@ -1,7 +1,7 @@
 ---
 name: Request a new language
 about: Request a new programming language for BestPracticesMcp. Provide only a language name and optional authoritative sources; Copilot or maintainers can handle the rest.
-title: "[Language request] %s"
+title: "[Language request] <INSERT LANGUAGE NAME HERE>"
 labels: enhancement, needs-triage
 assignees: ''
 ---
@@ -9,7 +9,7 @@ assignees: ''
 Please fill only the fields below. That's all we need from you.
 
 ## Language
-- Language name (required):
+- Language name (required): <INSERT LANGUAGE NAME HERE>
 
 ## Authoritative documentation sources (optional)
 Provide one URL per line (official docs, language website, RFCs, major style guides):
