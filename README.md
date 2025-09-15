@@ -35,9 +35,37 @@ The repository currently contains these language resources and corresponding MCP
   - Resource: `Languages/Java/java-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Java.cs`)
 
+- PHP
+  - Resource: `Languages/Php/php-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Php.cs`)
+
 - Ruby
   - Resource: `Languages/Ruby/ruby-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Ruby.cs`)
+
+- Swift
+  - Resource: `Languages/Swift/swift-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Swift.cs`)
+
+- Kotlin
+  - Resource: `Languages/Kotlin/kotlin-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Kotlin.cs`)
+
+- Go
+  - Resource: `Languages/Go/go-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Go.cs`)
+
+- Flutter
+  - Resource: `Languages/Flutter/flutter-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Flutter.cs`)
+
+- Rust
+  - Resource: `Languages/Rust/rust-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Rust.cs`)
+
+- C++
+  - Resource: `Languages/Cpp/cpp-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Cpp.cs`)
 
 ## Prerequisites
 
@@ -96,7 +124,7 @@ To add another language's best-practices follow the repository's current layout 
 We welcome contributions. Please follow these guidelines when opening a PR:
 
 - Formatting: Run `dotnet format BestPractices.sln` before pushing; CI will verify formatting.
-- Build: Ensure `dotnet build BestPractices.sln` passes locally.
+- Build: Ensure `dotnet build BestPracticesMcp.sln` passes locally.
 - Tests: Add unit tests for new logic where appropriate. There are no unit tests currently but adding tests is encouraged.
 - Small PRs: Prefer small, focused PRs (one language/tool per PR when adding new content).
 - Documentation: When adding or changing content in `Resources/`, include a short rationale in the PR description and link authoritative sources.
