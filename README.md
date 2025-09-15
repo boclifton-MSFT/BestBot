@@ -51,6 +51,10 @@ The repository currently contains these language resources and corresponding MCP
   - Resource: `Languages/Rust/rust-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Rust.cs`)
 
+- C++
+  - Resource: `Languages/Cpp/cpp-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Cpp.cs`)
+
 ## Prerequisites
 
 - .NET 9 SDK (required)
@@ -108,7 +112,7 @@ To add another language's best-practices follow the repository's current layout 
 We welcome contributions. Please follow these guidelines when opening a PR:
 
 - Formatting: Run `dotnet format BestPractices.sln` before pushing; CI will verify formatting.
-- Build: Ensure `dotnet build BestPractices.sln` passes locally.
+- Build: Ensure `dotnet build BestPracticesMcp.sln` passes locally.
 - Tests: Add unit tests for new logic where appropriate. There are no unit tests currently but adding tests is encouraged.
 - Small PRs: Prefer small, focused PRs (one language/tool per PR when adding new content).
 - Documentation: When adding or changing content in `Resources/`, include a short rationale in the PR description and link authoritative sources.
