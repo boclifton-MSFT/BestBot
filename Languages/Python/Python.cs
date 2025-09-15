@@ -1,17 +1,10 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Extensions.Mcp;
 using Microsoft.Extensions.Logging;
+using BestPracticesMcp.Utilities;
 
 namespace BestPracticesMcp.Functions;
 
-/// <summary>
-/// Provides tools for retrieving best practices for Python development.
-/// Utilizes a process-wide cache to minimize disk reads and improve performance.
-/// </summary>
-/// <remarks>
-/// This class is intended for internal use and is designed to be used within a function app context.
-/// It reads best practices from a markdown file and caches the content for a short duration.
-/// </remarks>
 public class PythonTools(ILogger<PythonTools> logger)
 {
     [Function(nameof(GetPythonBestPractices))]
@@ -22,7 +15,7 @@ public class PythonTools(ILogger<PythonTools> logger)
     {
         ToolLogging<PythonTools>.Serving(logger, "get_python_best_practices");
 
-        var filePath = Path.Combine(AppContext.BaseDirectory, "Resources", "python-best-practices.md");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "Languages", "Python", "python-best-practices.md");
 
         // Fast-path: serve from cache if valid
         if (FileCache.TryGetValid(filePath, out var cached))

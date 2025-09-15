@@ -26,7 +26,24 @@ This file records completed work, immediate validation steps, and a backlog of i
 ## Backlog / Future tasks
 
 Priority items:
-- Add best-practices content for additional languages (recommended: TypeScript, Java, Go, Rust, Kotlin).
+- Add best-practices content for additional languages:
+  - `TypeScript` — Official sources:
+    - https://www.typescriptlang.org/docs/
+    - https://www.typescriptlang.org/handbook/
+  - `Java` — Official sources:
+    - https://docs.oracle.com/en/java/
+    - https://openjdk.org/
+    - https://google.github.io/styleguide/javaguide.html
+  - `Go` — Official sources:
+    - https://go.dev/doc/
+    - https://go.dev/doc/effective_go
+  - `Rust` — Official sources:
+    - https://www.rust-lang.org/learn
+    - https://doc.rust-lang.org/book/
+    - https://rust-lang.github.io/api-guidelines/
+  - `Kotlin` — Official sources:
+    - https://kotlinlang.org/docs/home.html
+    - https://kotlinlang.org/docs/coding-conventions.html
 - Add MCP tool implementations for new languages (create `Functions/<Lang>Tools.cs` following the existing pattern).
 - Add CI pipeline steps to:
   - Build the solution

@@ -1,7 +1,7 @@
 using System;
 using Microsoft.Extensions.Logging;
 
-namespace BestPracticesMcp.Functions;
+namespace BestPracticesMcp.Utilities;
 
 /// <summary>
 /// Centralized logging helpers for MCP tools.

@@ -1,17 +1,10 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Extensions.Mcp;
 using Microsoft.Extensions.Logging;
+using BestPracticesMcp.Utilities;
 
 namespace BestPracticesMcp.Functions;
 
-/// <summary>
-/// Provides tools for retrieving best practices for Vue 3 development.
-/// Utilizes a process-wide cache to minimize disk reads and improve performance.
-/// </summary>
-/// <remarks>
-/// This class is intended for internal use and is designed to be used within a function app context.
-/// It reads best practices from a markdown file and caches the content for a short duration.
-/// </remarks>
 internal class Vue3Tools(ILogger<Vue3Tools> logger)
 {
     [Function(nameof(GetVue3BestPractices))]
@@ -22,7 +15,7 @@ internal class Vue3Tools(ILogger<Vue3Tools> logger)
     {
         ToolLogging<Vue3Tools>.Serving(logger, "get_vue3_best_practices");
 
-        var filePath = Path.Combine(AppContext.BaseDirectory, "Resources", "vue3-best-practices.md");
+        var filePath = Path.Combine(AppContext.BaseDirectory, "Languages", "Vue3", "vue3-best-practices.md");
 
         // Fast-path: serve from cache if valid
         if (FileCache.TryGetValid(filePath, out var cached))

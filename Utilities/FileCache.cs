@@ -4,7 +4,7 @@ using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace BestPracticesMcp.Functions;
+namespace BestPracticesMcp.Utilities;
 
 /// <summary>
 /// Lightweight, process-wide file content cache keyed by absolute file path.
