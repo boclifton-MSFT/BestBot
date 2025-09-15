@@ -259,6 +259,12 @@ jobs:
 - **Go by Example**: https://gobyexample.com/
 - **The Go Programming Language Specification**: https://go.dev/ref/spec
 
+## Resources
+
+- Effective Go: https://go.dev/doc/effective_go
+- Go docs and spec: https://go.dev/doc/
+- Go by Example: https://gobyexample.com/
+
 ## Attribution
 
 This guide synthesizes best practices from the official Go documentation, community standards, and established patterns in the Go ecosystem. Content is original and includes references to authoritative sources.

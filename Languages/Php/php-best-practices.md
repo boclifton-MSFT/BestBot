@@ -121,6 +121,12 @@ A comprehensive guide to writing clean, secure, and maintainable PHP code. These
 - Avoid obvious comments that just restate the code.
 - Consider using documentation generators like phpDocumentor.
 
+## Resources
+
+- PHP Manual: https://www.php.net/manual/en/
+- PHP-FIG / PSR standards: https://www.php-fig.org/
+- Composer: https://getcomposer.org/
+
 Minimal Fallback (if file unavailable)
 - Follow PSR standards for consistent code style
 - Use strict types and type declarations

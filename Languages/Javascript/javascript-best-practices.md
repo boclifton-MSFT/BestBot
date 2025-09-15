@@ -348,3 +348,10 @@ function validateEmail(email) {
 - **You Don't Know JS (book series)**: https://github.com/getify/You-Dont-Know-JS
 
 This guide focuses on vanilla JavaScript fundamentals. For framework-specific best practices (React, Vue, Angular), consult framework-specific resources in addition to these general principles.
+
+## Resources
+
+- MDN JavaScript docs: https://developer.mozilla.org/en-US/docs/Web/JavaScript
+- ECMAScript specification: https://tc39.es/ecma262/
+- ESLint: https://eslint.org/
+- JavaScript.info: https://javascript.info/

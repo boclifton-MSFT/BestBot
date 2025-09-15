@@ -210,3 +210,10 @@ ctest
 - CppCon conference talks: https://www.youtube.com/user/CppCon
 - C++ Standards Committee papers: https://www.open-std.org/jtc1/sc22/wg21/
 - Modern C++ features guide: https://github.com/AnthonyCalandra/modern-cpp-features
+
+## Resources
+
+- C++ Core Guidelines: https://isocpp.github.io/CppCoreGuidelines/
+- cppreference: https://en.cppreference.com/
+- Google C++ Style Guide: https://google.github.io/styleguide/cppguide.html
+- vcpkg: https://github.com/microsoft/vcpkg

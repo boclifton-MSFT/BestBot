@@ -181,4 +181,9 @@ cargo clippy
 - [The Rustonomicon](https://doc.rust-lang.org/nomicon/) - Advanced topics and unsafe code
 - [Rust by Example](https://doc.rust-lang.org/rust-by-example/) - Learn by examples
 - [Clippy lints](https://rust-lang.github.io/rust-clippy/master/) - Complete list of linting rules
-- [This Week in Rust](https://this-week-in-rust.org/) - Community newsletter
+
+## Resources
+
+- The Rust Book: https://doc.rust-lang.org/book/
+- Rust docs and API: https://doc.rust-lang.org/
+- Clippy: https://github.com/rust-lang/rust-clippy

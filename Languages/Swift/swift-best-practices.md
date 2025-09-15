@@ -209,6 +209,12 @@ swiftlint lint
 - Swift by Sundell — https://www.swiftbysundell.com/
 - Hacking with Swift — https://www.hackingwithswift.com/
 
+## Resources
+
+- Swift.org documentation: https://docs.swift.org/swift-book/
+- Swift API Design Guidelines: https://swift.org/documentation/api-design-guidelines/
+- Swift Package Manager docs: https://docs.swift.org/package-manager/
+
 ---
 
 *This guide synthesizes best practices from Apple's official Swift documentation and community style guides. Always refer to the latest official documentation for current guidance.*

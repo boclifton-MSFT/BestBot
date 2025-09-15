@@ -24,4 +24,8 @@ A concise, opinionated checklist for writing maintainable, reliable, and secure 
 - Prefer expression-bodied members for short, obvious implementations; otherwise keep method bodies simple.
 - Keep files focused: generally one public type per file.
 
-... (document continues with the same content as the original `Resources/csharp-best-practices.md`)
+## Resources
+
+- Official C# documentation: https://learn.microsoft.com/dotnet/csharp/
+- .NET Design Guidelines: https://learn.microsoft.com/dotnet/standard/design-guidelines/
+- Roslyn analyzers and code quality tooling: https://github.com/dotnet/roslyn-analyzers

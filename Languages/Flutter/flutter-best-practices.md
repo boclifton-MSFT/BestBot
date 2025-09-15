@@ -344,4 +344,12 @@ flutter build apk --release
 
 ---
 
+## Resources
+
+- Flutter docs: https://docs.flutter.dev/
+- Dart language guide: https://dart.dev/guides
+- Pub.dev (packages): https://pub.dev/
+
+---
+
 *Sources: Flutter.dev official documentation, Dart language guides, Flutter community best practices, and proven patterns from production Flutter applications.*

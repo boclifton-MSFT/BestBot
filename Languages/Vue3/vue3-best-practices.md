@@ -20,3 +20,10 @@ A concise, opinionated checklist for writing maintainable, reliable, and perform
 ## Component Structure and Naming
 
 ... (document continues with the same content as the original `Resources/vue3-best-practices.md`)
+
+## Resources
+
+- Vue 3 Guide: https://vuejs.org/guide/introduction.html
+- Vue Router: https://router.vuejs.org/
+- Vuex / Pinia: https://pinia.vuejs.org/
+- Composition API docs: https://vuejs.org/guide/extras/composition-api-faq.html

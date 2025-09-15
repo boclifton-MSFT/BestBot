@@ -24,4 +24,9 @@ A concise, opinionated checklist for writing maintainable, readable, and Pythoni
 - Organize imports: standard library, third-party packages, local imports (separated by blank lines).
 - Remove unused imports and variables; use tools like `isort` and `flake8`.
 
-... (document continues with the same content as the original `Resources/python-best-practices.md`)
+## Resources
+
+- Python docs: https://docs.python.org/3/
+- PEP 8 (style guide): https://peps.python.org/pep-0008/
+- Packaging Guide: https://packaging.python.org/
+- Type hints / typing docs: https://docs.python.org/3/library/typing.html

@@ -174,6 +174,8 @@ tasks.test {
 - [Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)
 - [Awesome Kotlin](https://kotlin.link/)
 
----
+## Resources
 
-*This guide covers general Kotlin best practices. For platform-specific guidance, consult Android, Spring, or other framework documentation.*
+- Kotlin docs: https://kotlinlang.org/docs/
+- Kotlin coding conventions: https://kotlinlang.org/docs/coding-conventions.html
+- Coroutines Guide: https://kotlinlang.org/docs/coroutines-guide.html

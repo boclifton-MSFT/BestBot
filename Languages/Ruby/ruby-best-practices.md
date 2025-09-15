@@ -115,9 +115,8 @@ A concise, opinionated checklist for writing maintainable, readable, and idiomat
 - Leverage Rails' built-in helpers and avoid reinventing common functionality.
 - Use database constraints and validations appropriately.
 
-Minimal Fallback (if file unavailable)
-- Write clear, expressive code that reads like natural language
-- Use blocks and iterators for better readability
-- Follow Ruby Style Guide conventions
-- Test your code thoroughly
-- Manage dependencies with Bundler
+## Resources
+
+- Ruby documentation: https://www.ruby-lang.org/en/documentation/
+- Ruby Style Guide: https://rubystyle.guide/
+- RuboCop: https://rubocop.org/

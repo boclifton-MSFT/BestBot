@@ -56,3 +56,10 @@ Minimal Fallback (if file unavailable)
 - Use clear names and document behavior
 - Test behavior and edge cases
 
+## Resources
+
+- Oracle Java documentation: https://docs.oracle.com/javase/
+- OpenJDK Guide: https://openjdk.org/guide/
+- Google Java Style Guide: https://google.github.io/styleguide/javaguide.html
+- Effective Java (Joshua Bloch): https://www.pearson.com/
+
