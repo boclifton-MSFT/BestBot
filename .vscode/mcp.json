@@ -5,6 +5,12 @@
       "id": "function-mcp-extension-key",
       "description": "The Azure Function MCP extension key",
       "password": true
+    },
+    {
+      "type": "promptString",
+      "id": "function-mcp-extension-baseUrl",
+      "description": "The Azure Function MCP extension base URL",
+      "password": false
     }
   ],
   "servers": {
@@ -14,7 +20,7 @@
     },
     "BestPractices-Azure": {
       "type": "sse",
-      "url": "https://az-func-poxoatisz5nre.azurewebsites.net/runtime/webhooks/mcp/sse",
+      "url": "https://${input:function-mcp-extension-baseUrl}.azurewebsites.net/runtime/webhooks/mcp/sse",
       "headers": {
         "x-functions-key": "${input:function-mcp-extension-key}"
       }
