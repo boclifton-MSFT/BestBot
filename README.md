@@ -35,6 +35,10 @@ The repository currently contains these language resources and corresponding MCP
   - Resource: `Languages/Java/java-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Java.cs`)
 
+- Go
+  - Resource: `Languages/Go/go-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Go.cs`)
+
 - Flutter
   - Resource: `Languages/Flutter/flutter-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Flutter.cs`)
