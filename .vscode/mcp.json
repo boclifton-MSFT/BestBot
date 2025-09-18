@@ -5,12 +5,30 @@
       "id": "function-port",
       "description": "Port for local function host",
       "default": "7071"
+    },
+    {
+      "type": "promptString",
+      "id": "function-base-url",
+      "description": "Base URL for function app"
+    },
+    {
+      "type": "promptString",
+      "id": "function-key",
+      "description": "Function MCP key",
+      "password": true
     }
   ],
   "servers": {
-    "BestPractices-Local": {
+    "BestBot-Local": {
       "url": "http://localhost:${input:function-port}/runtime/webhooks/mcp/sse",
       "type": "sse"
+    },
+    "BestBot-Azure": {
+      "url": "https://${input:function-base-url}/runtime/webhooks/mcp/sse",
+      "type": "sse",
+      "headers": {
+        "x-functions-key": "${input:function-key}"
+      }
     }
   }
 }

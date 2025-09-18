@@ -3,7 +3,7 @@ name: bestpracmcp
 # Azure Developer CLI configuration
 infra:
   path: infra
-  module: main.bicep
+  module: main
   parameters:
     location: southcentralus
     environmentName: ${AZURE_ENV_NAME}
