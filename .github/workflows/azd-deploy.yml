@@ -31,7 +31,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
-          include-prerelease: true
 
       - name: Restore dependencies
         run: dotnet restore BestPracticesMcp.sln
@@ -56,7 +55,6 @@ jobs:
         uses: actions/setup-dotnet@v4
         with:
           dotnet-version: '9.0.x'
-          include-prerelease: true
 
       - name: Install Azure Developer CLI
         uses: Azure/setup-azd@v1.0.0
