@@ -9,10 +9,6 @@ namespace BestPracticesMcp.Functions;
 /// Provides tools for retrieving best practices for the Ruby programming language.
 /// Utilizes a process-wide cache to minimize disk reads and improve performance.
 /// </summary>
-/// <remarks>
-/// This class is intended for internal use and is designed to be used within a function app context.
-/// It reads best practices from a markdown file and caches the content for a short duration.
-/// </remarks>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1852:Type can be sealed", Justification = "Instantiated by Functions host via reflection; suppress analyzer to avoid sealing suggestion")]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by Functions host via reflection")]
 internal class RubyTools(ILogger<RubyTools> logger)

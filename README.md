@@ -183,12 +183,6 @@ PR checklist (include in PR description):
 - [ ] README updated (if adding a language or changing resource paths)
 - [ ] Changes documented in the PR description
 
-## Roadmap / ideas
-
-- Add more languages (TypeScript, Java, Go, Rust, Kotlin are good candidates).
-- Add CI to run builds and formatting checks.
-- Add taxonomy or tagging for resource files so clients can query by topic.
-
 ## Contact / ownership
 
 Project maintained by repository owners. Open an issue or PR for questions, corrections, or suggested best-practice sources.

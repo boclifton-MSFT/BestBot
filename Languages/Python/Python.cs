@@ -5,6 +5,10 @@ using Microsoft.Extensions.Logging;
 
 namespace BestPracticesMcp.Functions;
 
+/// <summary>
+/// Provides tools for retrieving best practices for the Python programming language.
+/// Utilizes a process-wide cache to minimize disk reads and improve performance.
+/// </summary>
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1852:Type can be sealed", Justification = "Instantiated by Functions host via reflection; suppress analyzer to avoid sealing suggestion")]
 [System.Diagnostics.CodeAnalysis.SuppressMessage("Performance", "CA1812:Avoid uninstantiated internal classes", Justification = "Instantiated by Functions host via reflection")]
 internal class PythonTools(ILogger<PythonTools> logger)
