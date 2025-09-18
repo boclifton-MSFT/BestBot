@@ -1,0 +1,77 @@
+name: Deploy with Azure Developer CLI
+
+# This workflow is disabled by default
+# To enable, change the trigger to appropriate events like push to main
+on:
+  workflow_dispatch:  # Manual trigger only for now
+  # Uncomment below to enable automatic deployment
+  # push:
+  #   branches: [ main ]
+  # pull_request:
+  #   branches: [ main ]
+
+env:
+  AZURE_CLIENT_ID: ${{ vars.AZURE_CLIENT_ID }}
+  AZURE_TENANT_ID: ${{ vars.AZURE_TENANT_ID }}
+  AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+  AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
+
+permissions:
+  id-token: write
+  contents: read
+
+jobs:
+  build-and-validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+          include-prerelease: true
+
+      - name: Restore dependencies
+        run: dotnet restore BestPracticesMcp.sln
+
+      - name: Build
+        run: dotnet build BestPracticesMcp.sln --no-restore
+
+      - name: Verify code formatting
+        run: dotnet format BestPracticesMcp.sln --verify-no-changes
+
+  deploy:
+    needs: build-and-validate
+    runs-on: ubuntu-latest
+    # Only run deploy on main branch or manual dispatch
+    if: github.ref == 'refs/heads/main' || github.event_name == 'workflow_dispatch'
+    
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET 9
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '9.0.x'
+          include-prerelease: true
+
+      - name: Install Azure Developer CLI
+        uses: Azure/setup-azd@v1.0.0
+
+      - name: Log in with Azure (Federated Credentials)
+        uses: Azure/login@v2
+        with:
+          client-id: ${{ env.AZURE_CLIENT_ID }}
+          tenant-id: ${{ env.AZURE_TENANT_ID }}
+          subscription-id: ${{ env.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Azure Dev Provision
+        run: azd provision --no-prompt
+        env:
+          AZD_INITIAL_ENVIRONMENT_CONFIG: ${{ secrets.AZD_INITIAL_ENVIRONMENT_CONFIG }}
+
+      - name: Azure Dev Deploy
+        run: azd deploy --no-prompt
