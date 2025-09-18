@@ -1,6 +1,6 @@
 ---
 name: Request a new language
-about: Request a new programming language for BestPracticesMcp. Provide only a language name and optional authoritative sources; Copilot or maintainers can handle the rest.
+about: Request a new programming language for BestBot. Provide only a language name and optional authoritative sources; Copilot or maintainers can handle the rest.
 title: "[Language request] <INSERT LANGUAGE NAME HERE>"
 labels: enhancement, needs-triage
 assignees: ''

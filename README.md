@@ -1,6 +1,8 @@
-# BestPracticesMcp
+# BestBot
 
-BestPracticesMcp is a small Azure Functions-based MCP (Model Context Protocol) server that serves curated, authoritative "best practices" guidance for programming languages and frameworks. The project is intentionally simple: it reads markdown resources on disk and exposes them via MCP tool triggers.
+BestBot (formerly BestPracticesMcp) is a small Azure Functions-based MCP (Model Context Protocol) server that serves curated, authoritative "best practices" guidance for programming languages and frameworks. The project is intentionally simple: it reads markdown resources on disk and exposes them via MCP tool triggers.
+
+**Renaming note:** The project is being rebranded to **BestBot** for public/branding purposes. For compatibility, the repository, solution, and project filenames (for example `BestPracticesMcp.sln` and `BestPracticesMcp.csproj`) remain unchanged — keep using those filenames in build commands and CI unless you intentionally update workflows and references.
 
 This repository is aimed at developers who want to contribute canonical best-practice guidance and publish it via an MCP server.
 
@@ -90,6 +92,9 @@ The repository currently contains these language resources and corresponding MCP
 1. Restore and build:
    - `dotnet restore`
    - `dotnet build BestPractices.sln`
+
+> Note: The public/branding name shown in this README is **BestBot**; however the actual solution and project filenames still use the original names (e.g. `BestPracticesMcp.sln`). When running local builds, CI pipelines, or other tooling, continue to use the filenames shown in the code blocks above to avoid breaking tooling.
+
 2. Format code (required before committing):
    - `dotnet format BestPractices.sln`
    - Verify formatting: `dotnet format BestPractices.sln --verify-no-changes`

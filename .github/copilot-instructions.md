@@ -1,8 +1,8 @@
-# BestPracticesMcp - Azure Functions MCP Server
+# BestBot - Azure Functions MCP Server
 
 **ALWAYS reference these instructions first and only fallback to search or additional commands when information here is incomplete or errors occur.**
 
-BestPracticesMcp is an Azure Functions application (C# .NET 9) that serves as an MCP (Model Context Protocol) server. It provides best practices guidance for C#, Python, and Vue 3 development through cached markdown content served via Azure Functions with MCP extension.
+BestBot (formerly BestPracticesMcp) is an Azure Functions application (C# .NET 9) that serves as an MCP (Model Context Protocol) server. It provides best practices guidance for C#, Python, and Vue 3 development through cached markdown content served via Azure Functions with MCP extension.
 
 ## Working Effectively
 

@@ -1,6 +1,6 @@
 # GitHub Actions Workflows
 
-This directory contains GitHub Actions workflows for the BestPracticesMcp project.
+This directory contains GitHub Actions workflows for the BestBot project.
 
 ## Workflows
 
@@ -43,7 +43,7 @@ This directory contains GitHub Actions workflows for the BestPracticesMcp projec
 #### Azure Service Principal Setup
 1. Create a service principal:
    ```bash
-   az ad sp create-for-rbac --name "BestPracticesMcp-GitHub" --role contributor --scopes /subscriptions/{subscription-id} --json-auth
+   az ad sp create-for-rbac --name "BestBot-GitHub" --role contributor --scopes /subscriptions/{subscription-id} --json-auth
    ```
 2. Assign additional permissions as needed for resource group and storage account creation
 3. Configure federated credentials for GitHub Actions OIDC

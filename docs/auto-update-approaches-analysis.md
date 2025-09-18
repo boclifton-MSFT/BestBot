@@ -2,7 +2,7 @@
 
 ## Executive Summary
 
-The BestPracticesMcp server currently serves static markdown files containing best practices for various programming languages. As languages evolve, these best practices need periodic updates to remain current and authoritative. This document analyzes different approaches for automating the update process while maintaining quality, consistency, and reliability.
+The BestBot server (formerly BestPracticesMcp) currently serves static markdown files containing best practices for various programming languages. As languages evolve, these best practices need periodic updates to remain current and authoritative. This document analyzes different approaches for automating the update process while maintaining quality, consistency, and reliability.
 
 ## Current Architecture Analysis
 
