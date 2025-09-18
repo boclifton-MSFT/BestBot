@@ -47,6 +47,10 @@ The repository currently contains these language resources and corresponding MCP
   - Resource: `Languages/R/r-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/R.cs`)
 
+- React
+  - Resource: `Languages/React/react-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/React.cs`)
+
 - Ruby
   - Resource: `Languages/Ruby/ruby-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Ruby.cs`)
