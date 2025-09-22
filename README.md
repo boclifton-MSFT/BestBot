@@ -21,6 +21,10 @@ The repository currently contains these language resources and corresponding MCP
   - Resource: `Languages/Csharp/csharp-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Csharp.cs`)
 
+- .NET Aspire
+  - Resource: `Languages/NetAspire/netaspire-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/NetAspire.cs`)
+
 - JavaScript
   - Resource: `Languages/Javascript/javascript-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Javascript.cs`)
