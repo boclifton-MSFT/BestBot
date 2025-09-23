@@ -9,6 +9,22 @@ param tags object = {
   'azd-env-name': environmentName
 }
 
+@description('Whether to deploy API Management')
+param deployApim bool = false
+
+@description('API Management SKU')
+@allowed(['Consumption', 'Developer', 'Standard', 'Premium'])
+param apimSku string = 'Developer'
+
+@description('Publisher email for API Management (required if deployApim is true)')
+param apimPublisherEmail string = ''
+
+@description('Publisher name for API Management')
+param apimPublisherName string = 'BestBot Team'
+
+@description('Whether to enable VNet integration for APIM')
+param enableApimVnet bool = false
+
 // Derived names
 var resourceToken = uniqueString(subscription().id, resourceGroup().id, location, environmentName)
 var planName = 'az-asp-${resourceToken}'
@@ -16,6 +32,7 @@ var aiName = 'az-ai-${resourceToken}'
 var siteName = 'az-func-${resourceToken}'
 var uamiName = 'az-umi-${resourceToken}'
 var lawName = 'az-law-${resourceToken}'
+var apimName = 'az-apim-${resourceToken}'
 var storageBase = toLower(replace('azst${resourceToken}', '-', ''))
 var storageName = length(storageBase) > 24 ? substring(storageBase, 0, 24) : storageBase
 
@@ -145,6 +162,31 @@ resource site 'Microsoft.Web/sites@2024-04-01' = {
       minTlsVersion: '1.2'
       ftpsState: 'Disabled'
       scmIpSecurityRestrictionsUseMain: true
+      // Configure IP restrictions to only allow APIM access when deployed
+      ipSecurityRestrictions: deployApim ? [
+        {
+          ipAddress: 'ApiManagement'
+          action: 'Allow'
+          priority: 100
+          name: 'Allow APIM'
+          description: 'Allow traffic from Azure API Management'
+        }
+        {
+          ipAddress: 'Any'
+          action: 'Deny'
+          priority: 200
+          name: 'Deny all other traffic'
+          description: 'Deny all other traffic when APIM is enabled'
+        }
+      ] : [
+        {
+          ipAddress: 'Any'
+          action: 'Allow'
+          priority: 100
+          name: 'Allow all traffic'
+          description: 'Allow all traffic when APIM is not enabled'
+        }
+      ]
     }
     functionAppConfig: {
       deployment: {
@@ -282,9 +324,47 @@ resource raMetrics 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   }
 }
 
+// Role assignment for APIM managed identity to access Function App (when APIM is deployed)
+resource raApimFunctionApp 'Microsoft.Authorization/roleAssignments@2022-04-01' = if (deployApim) {
+  name: guid(site.id, 'de139f84-1756-47ae-9be6-808fbbe84772', uami.id, 'apim')
+  scope: site
+  properties: {
+    roleDefinitionId: subscriptionResourceId(
+      'Microsoft.Authorization/roleDefinitions',
+      'de139f84-1756-47ae-9be6-808fbbe84772'
+    ) // Website Contributor
+    principalId: uami.properties.principalId
+    principalType: 'ServicePrincipal'
+  }
+}
+
+// Deploy API Management (conditional)
+module apimModule 'modules/apim.bicep' = if (deployApim) {
+  name: 'apim-deployment'
+  params: {
+    location: location
+    tags: tags
+    apimName: apimName
+    apimSku: apimSku
+    publisherEmail: apimPublisherEmail
+    publisherName: apimPublisherName
+    functionAppName: site.name
+    managedIdentityId: uami.id
+    enableVnet: enableApimVnet
+  }
+}
+
 // Outputs for azd wiring
 output functionAppName string = site.name
 output functionAppResourceId string = site.id
 output applicationInsightsConnectionString string = appi.properties.ConnectionString
 output storageAccountName string = stg.name
 output RESOURCE_GROUP_ID string = resourceGroup().id
+
+// APIM outputs (conditional)
+output apimDeployed bool = deployApim
+output apimName string = deployApim && apimModule != null ? apimModule.outputs.apimName : ''
+output apimGatewayUrl string = deployApim && apimModule != null ? apimModule.outputs.apimGatewayUrl : ''
+output apimManagementUrl string = deployApim && apimModule != null ? apimModule.outputs.apimManagementUrl : ''
+output apimDeveloperPortalUrl string = deployApim && apimModule != null ? apimModule.outputs.apimDeveloperPortalUrl : ''
+output mcpEndpoint string = deployApim && apimModule != null ? apimModule.outputs.mcpEndpoint : 'https://${site.name}.azurewebsites.net'
