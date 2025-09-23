@@ -314,3 +314,6 @@ _azurite_db_*.json.*
 # Generic fallbacks
 **/__azurite*
 **/_azurite*
+
+# Infrastructure test files
+test-*-params.json

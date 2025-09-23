@@ -113,6 +113,112 @@ The repository currently contains these language resources and corresponding MCP
    - Ensure you have `azd` installed and authenticated to the target subscription.
    - From the repository root run `azd up` — this uses `azure.yaml` and `infra/main.bicep` to provision the required resources and deploy the code. Note: provisioning can take several minutes.
 
+## Azure API Management Integration
+
+BestBot supports optional Azure API Management (APIM) integration to provide a secure, manageable, and versioned API surface for MCP endpoints. When enabled, APIM fronts the Function App and requires subscription keys for access.
+
+### Deploying with APIM
+
+To deploy with APIM integration, set the following parameters when running `azd up`:
+
+```bash
+# Set APIM deployment parameters
+azd env set deployApim true
+azd env set apimPublisherEmail "your-email@example.com"
+azd env set apimSku "Developer"  # Optional: Developer, Standard, Premium, Consumption
+
+# Deploy with APIM
+azd up
+```
+
+Alternatively, you can create a custom `infra/main.parameters.json` file:
+
+```json
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "southcentralus"
+    },
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "deployApim": {
+      "value": true
+    },
+    "apimPublisherEmail": {
+      "value": "your-email@example.com"
+    },
+    "apimSku": {
+      "value": "Developer"
+    }
+  }
+}
+```
+
+### APIM Configuration
+
+When APIM is deployed:
+
+- **Security**: Function App is restricted to only accept traffic from APIM using IP restrictions
+- **Authentication**: APIM uses managed identity to authenticate with the Function App
+- **Subscription Keys**: All API calls require valid APIM subscription keys
+- **Endpoints**: MCP endpoints are available at `https://{apim-gateway}/mcp/runtime/webhooks/mcp/*`
+
+### Testing APIM Integration
+
+After deployment with APIM enabled, test the integration:
+
+1. **Get the APIM endpoint** from deployment outputs:
+   ```bash
+   azd env get-values | grep mcpEndpoint
+   ```
+
+2. **Create a subscription** in the APIM Developer Portal or Azure Portal
+
+3. **Test the MCP endpoint** with a subscription key:
+   ```bash
+   # Test MCP runtime endpoint (requires subscription key)
+   curl -H "Ocp-Apim-Subscription-Key: YOUR_SUBSCRIPTION_KEY" \
+        "https://your-apim-gateway.azure-api.net/mcp/runtime/webhooks/mcp/sse"
+   ```
+
+4. **Verify direct Function App access is blocked**:
+   ```bash
+   # This should return 403 Forbidden when APIM is enabled
+   curl "https://your-function-app.azurewebsites.net/runtime/webhooks/mcp/sse"
+   ```
+
+### APIM Management
+
+- **Developer Portal**: Access at the `apimDeveloperPortalUrl` output value
+- **Management API**: Access at the `apimManagementUrl` output value  
+- **Subscription Management**: Use Azure Portal or APIM REST APIs to manage API subscriptions
+
+### Local Development vs Azure Deployment
+
+- **Local Development**: Run Function App directly without APIM (set `deployApim: false` or omit parameter)
+- **Azure Deployment**: Can choose to deploy with or without APIM based on requirements
+- **Testing**: Local development endpoints work directly; Azure endpoints require APIM subscription keys when APIM is enabled
+
+### Cost Considerations
+
+- **Developer SKU**: Recommended for dev/test scenarios (~$50/month)
+- **Consumption SKU**: Pay-per-call pricing (if available in your region)
+- **Standard/Premium**: Production scenarios with higher availability requirements
+
+### Disabling APIM
+
+To disable APIM and allow direct Function App access:
+
+```bash
+azd env set deployApim false
+azd up
+```
+
+This will redeploy the infrastructure without APIM and remove IP restrictions from the Function App.
+
 ## Project layout
 
 - `./Functions/` — MCP tool implementations. Each language has a `*Tools` class that exposes a method triggered by the MCP extension.
@@ -121,6 +227,8 @@ The repository currently contains these language resources and corresponding MCP
   - A `<language-name>.cs` file containing the Azure Function code written in C#.
 - `./Utilities/` — shared helpers (logging, caching) such as `FileCache.cs` and `ToolLogging.cs` live here.
 - `./infra/` — Bicep templates for Azure deployment (used by `azd` when deploying).
+  - `main.bicep` — Main infrastructure template with conditional APIM deployment
+  - `modules/apim.bicep` — Azure API Management module for fronting the Function App
 
 ## Adding a new language using Github
 
