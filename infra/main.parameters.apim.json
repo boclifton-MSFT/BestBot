@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "location": {
+      "value": "southcentralus"
+    },
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "deployApim": {
+      "value": true
+    },
+    "apimPublisherEmail": {
+      "value": "your-email@example.com"
+    },
+    "apimSku": {
+      "value": "Developer"
+    },
+    "apimPublisherName": {
+      "value": "BestBot Development Team"
+    },
+    "enableApimVnet": {
+      "value": false
+    }
+  }
+}
