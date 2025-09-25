@@ -12,17 +12,10 @@ var storageAccountName = take(toLower('${namePrefix}sa${uniqueSuffix}'), 24)
 var planName = take(toLower('${namePrefix}-flex-${uniqueSuffix}'), 40)
 var functionAppName = take(toLower('${namePrefix}-func-${uniqueSuffix}'), 60)
 var appInsightsName = take(toLower('${namePrefix}-appi-${uniqueSuffix}'), 60)
-var identityName = take(toLower('${namePrefix}-id-${uniqueSuffix}'), 90)
 var deploymentContainerName = take(replace(toLower('${namePrefix}deploy${uniqueSuffix}'), '-', ''), 63)
 var blobDataContributorRoleId = 'ba92f5b4-2d11-453d-a403-e96b0029c9fe'
 var queueDataContributorRoleId = '974c5e8b-45b9-4653-ba55-5f855dd0fb88'
 var tableDataContributorRoleId = '0a9a7e1f-b9d0-4cc4-a60d-0319b160aaa3'
-
-resource funcIdentity 'Microsoft.ManagedIdentity/userAssignedIdentities@2024-11-30' = {
-  name: identityName
-  location: location
-  tags: tags
-}
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   name: storageAccountName
@@ -34,13 +27,10 @@ resource storageAccount 'Microsoft.Storage/storageAccounts@2025-01-01' = {
   tags: tags
   properties: {
     allowBlobPublicAccess: false
-    allowSharedKeyAccess: true
     minimumTlsVersion: 'TLS1_2'
     supportsHttpsTrafficOnly: true
-    publicNetworkAccess: 'Enabled'
   }
 }
-
 
 resource deploymentContainer 'Microsoft.Storage/storageAccounts/blobServices/containers@2023-05-01' = {
   name: '${storageAccount.name}/default/${deploymentContainerName}'
@@ -82,10 +72,7 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
     'azd-service-name': 'functionapp'
   })
   identity: {
-    type: 'SystemAssigned, UserAssigned'
-    userAssignedIdentities: {
-      '${funcIdentity.id}': {}
-    }
+    type: 'SystemAssigned'
   }
   properties: {
     serverFarmId: hostingPlan.id
@@ -151,67 +138,35 @@ resource functionApp 'Microsoft.Web/sites@2024-11-01' = {
   }
 }
 
-resource functionStorageSystemBlobRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, functionApp.id, blobDataContributorRoleId, 'system')
+resource functionStorageBlobRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(storageAccount.id, functionApp.id, blobDataContributorRoleId)
   scope: storageAccount
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', blobDataContributorRoleId)
     principalId: functionApp.identity.principalId
-    principalType: 'ServicePrincipal'
   }
 }
 
-resource functionStorageSystemQueueRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, functionApp.id, queueDataContributorRoleId, 'system')
+resource functionStorageQueueRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(storageAccount.id, functionApp.id, queueDataContributorRoleId)
   scope: storageAccount
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', queueDataContributorRoleId)
     principalId: functionApp.identity.principalId
-    principalType: 'ServicePrincipal'
   }
 }
 
-resource functionStorageSystemTableRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, functionApp.id, tableDataContributorRoleId, 'system')
+resource functionStorageTableRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
+  name: guid(storageAccount.id, functionApp.id, tableDataContributorRoleId)
   scope: storageAccount
   properties: {
     roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', tableDataContributorRoleId)
     principalId: functionApp.identity.principalId
-    principalType: 'ServicePrincipal'
-  }
-}
-
-resource functionStorageUserBlobRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, funcIdentity.id, blobDataContributorRoleId, 'user')
-  scope: storageAccount
-  properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', blobDataContributorRoleId)
-    principalId: funcIdentity.properties.principalId
-    principalType: 'ServicePrincipal'
-  }
-}
-
-resource functionStorageUserQueueRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, funcIdentity.id, queueDataContributorRoleId, 'user')
-  scope: storageAccount
-  properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', queueDataContributorRoleId)
-    principalId: funcIdentity.properties.principalId
-    principalType: 'ServicePrincipal'
-  }
-}
-
-resource functionStorageUserTableRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
-  name: guid(storageAccount.id, funcIdentity.id, tableDataContributorRoleId, 'user')
-  scope: storageAccount
-  properties: {
-    roleDefinitionId: subscriptionResourceId('Microsoft.Authorization/roleDefinitions', tableDataContributorRoleId)
-    principalId: funcIdentity.properties.principalId
-    principalType: 'ServicePrincipal'
   }
 }
 
 output functionAppName string = functionApp.name
 output functionAppHostname string = functionApp.properties.defaultHostName
 output applicationInsightsConnectionString string = appInsights.properties.ConnectionString
-output userAssignedIdentityId string = funcIdentity.id
+output functionAppPrincipalId string = functionApp.identity.principalId
+output storageAccountId string = storageAccount.id

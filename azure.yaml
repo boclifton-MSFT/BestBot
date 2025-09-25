@@ -12,6 +12,12 @@ infra:
     zipDeployEndpoint: AZURE_FUNCTIONAPP_ZIP_DEPLOY_ENDPOINT
     storageAccountName: AZURE_STORAGE_ACCOUNT_NAME
     managedIdentityClientId: AZURE_MANAGED_IDENTITY_CLIENT_ID
+    deploymentRunnerIdentityId: DEPLOYMENT_RUNNER_IDENTITY_ID
+    deploymentRunnerIdentityClientId: DEPLOYMENT_RUNNER_IDENTITY_CLIENT_ID
+    deploymentRunnerSubnetId: DEPLOYMENT_RUNNER_SUBNET_ID
+    deploymentVnetName: DEPLOYMENT_VNET_NAME
+    deploymentKeyVaultName: AZURE_KEY_VAULT_NAME
+    deploymentKeyVaultId: AZURE_KEY_VAULT_RESOURCE_ID
 
 services:
   functionapp:

@@ -39,9 +39,6 @@ The repository currently contains these language resources and corresponding MCP
 
 - TypeScript
   - Resource: `Languages/Typescript/typescript-best-practices.md`
-  - MCP tool pattern: `Functions/<Language>Tools.cs` (add `Functions/TypescriptTools.cs` when implementing)
-
-- Java
   - Resource: `Languages/Java/java-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Java.cs`)
 
@@ -80,15 +77,9 @@ The repository currently contains these language resources and corresponding MCP
 - Flutter
   - Resource: `Languages/Flutter/flutter-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Flutter.cs`)
-
-- Rust
-  - Resource: `Languages/Rust/rust-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Rust.cs`)
 
 - C++
-  - Resource: `Languages/Cpp/cpp-best-practices.md`
-  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Cpp.cs`)
-
 ## Prerequisites
 
 - .NET 9 SDK (required)
@@ -112,6 +103,104 @@ The repository currently contains these language resources and corresponding MCP
 4. (Optional) Provision and deploy to Azure using the Azure Developer CLI (`azd`):
    - Ensure you have `azd` installed and authenticated to the target subscription.
    - From the repository root run `azd up` — this uses `azure.yaml` and `infra/main.bicep` to provision the required resources and deploy the code. Note: provisioning can take several minutes.
+
+## Secure azd deployments in private networks
+
+Some subscriptions enforce policies that automatically disable public network access on storage accounts. The infrastructure template provisions everything needed to keep deployments compliant:
+
+- A virtual network with delegated subnets for the Function App, private endpoints, and the deployment runner.
+- Private endpoints and DNS zones for the Function App storage account and an Azure Key Vault that holds deployment secrets.
+- A user-assigned managed identity scoped with least-privilege access (resource group Contributor, Storage Data Contributor, Key Vault Secrets User).
+- An optional Azure Container Instance (ACI) “azd runner” that executes provisioning/deployment entirely inside the private network.
+
+### Manage secrets with the deployment Key Vault
+
+The template outputs the Key Vault name (`AZURE_KEY_VAULT_NAME`) and exposes it to the runner as the `AZD_KEY_VAULT_NAME` environment variable. Store connection strings, repo credentials, or PATs in this vault:
+
+```powershell
+$vault = azd env get-value AZURE_KEY_VAULT_NAME
+az keyvault secret set --vault-name $vault --name 'GitAccessToken' --value '<token>'
+```
+
+Inside the container use managed identity to retrieve secrets:
+
+```bash
+az keyvault secret show --vault-name "$AZD_KEY_VAULT_NAME" --name GitAccessToken --query value -o tsv
+```
+
+### Build and publish the runner image
+
+Build the container definition in `container-runner/Dockerfile` and push it to your Azure Container Registry (ACR):
+
+```powershell
+$tag = "<your-acr>.azurecr.io/azd-runner:latest"
+docker build --file container-runner/Dockerfile --tag $tag .
+docker push $tag
+```
+
+If Docker Desktop is unavailable locally, build the image in CI (GitHub Actions/Azure DevOps) or via an [ACR task](https://learn.microsoft.com/azure/container-registry/container-registry-tasks-overview).
+
+### Configure azd environment settings
+
+After running `azd provision` at least once, configure the environment to enable the runner parameters:
+
+```powershell
+pwsh ./scripts/Configure-AciDeploymentRunner.ps1 `
+  -EnvironmentName azd-env-name `
+  -Image <your-acr>.azurecr.io/azd-runner:latest `
+  -Command "git clone https://github.com/boclifton-MSFT/BestPracticesMcp.git repo && cd repo && azd provision --environment azd-env-name && azd deploy" `
+  -EnvironmentVariables @{ AZD_ENV_NAME = "azd-env-name"; AZURE_SUBSCRIPTION_ID = "<subscription-id>" }
+
+azd provision
+```
+
+The script enables the runner, sets the image/command parameters, and optionally injects additional environment variables. The managed identity (`DEPLOYMENT_RUNNER_IDENTITY_ID`) already has the necessary permissions to access the resource group, Key Vault, and storage account.
+
+### Run deployments on demand
+
+Use `scripts/Invoke-AciDeploymentRunner.ps1` to spin up an ACI job that executes the configured command:
+
+```powershell
+pwsh ./scripts/Invoke-AciDeploymentRunner.ps1 `
+  -EnvironmentName azd-env-name `
+  -Command "azd provision --environment azd-env-name && azd deploy" `
+  -FollowLogs
+```
+
+The script reads runtime values from the azd environment, creates a uniquely named container group in the secure subnet, and streams logs until completion. Use `-NoWait` to return immediately and `-Name` to control the container group name.
+
+### Automate deployments
+
+- **CI/CD pipeline**: Run the trigger script from a GitHub Actions or Azure DevOps job that has az CLI/azd installed. The pipeline only needs control plane access; the ACI container performs the private-network deployment work.
+- **Scheduled runs**: Combine the script with Azure Automation or Logic Apps to kick off container jobs on a schedule (nightly sync, weekly refresh, etc.).
+- **Manual executions**: Operators can invoke the script locally or from a Bastion-connected VM.
+
+### Monitor and troubleshoot
+
+- Tail logs in real time:
+  ```powershell
+  az container logs --name <container-name> --resource-group <rg> --follow
+  ```
+- Check job status:
+  ```powershell
+  az container show --name <container-name> --resource-group <rg> --query "instanceView.state"
+  ```
+- Attach for interactive output if needed: `az container attach --name <container-name> --resource-group <rg>`
+
+### Clean up after runs
+
+- Set `deployDeploymentRunner` back to `false` (or rerun the configure script with an empty command) and execute `azd provision` to remove the container group until the next deployment window.
+- Delete completed container groups when you no longer need their logs:
+  ```powershell
+  az container delete --name <container-name> --resource-group <rg> --yes
+  ```
+
+### Security checklist
+
+- Keep the managed identity scoped to the resource group plus Storage Data Contributor and Key Vault Secrets User.
+- Restrict ACR access (private endpoints, firewall rules, or AAD-only auth) so only trusted identities can pull the runner image.
+- Prefer Key Vault secrets and environment variables—never bake secrets into the container image.
+- Audit container runs via Azure Activity Log and consider Application Insights or Log Analytics alerts for failed deployments.
 
 ## Azure API Management Integration
 
