@@ -12,10 +12,10 @@
       "value": true
     },
     "apimPublisherEmail": {
-      "value": "your-email@example.com"
+      "value": "boclifton@microsoft.com"
     },
     "apimSku": {
-      "value": "Developer"
+      "value": "StandardV2"
     },
     "apimPublisherName": {
       "value": "BestBot Development Team"

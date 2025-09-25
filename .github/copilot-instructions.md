@@ -119,19 +119,37 @@ After successful deployment:
 ### Repository Structure
 ```
 .
-├── BestPractices.sln              # Solution file
+├── BestPracticesMcp.sln           # Solution file
 ├── BestPracticesMcp.csproj        # Main project file (.NET 9, Azure Functions v4)
-├── Program.cs                     # Application entry point with MCP configuration
-├── Csharp.cs                      # C# best practices MCP tool
-├── Python.cs                     # Python best practices MCP tool  
-├── Vue3.cs                        # Vue 3 best practices MCP tool
-├── Resources/                     # Best practices markdown files
-├── host.json                      # Function host configuration
-├── local.settings.json            # Local development settings (create this)
+├── Program.cs                     # Application entry point with MCP + tool registrations
 ├── azure.yaml                     # Azure Developer CLI configuration
-├── infra/                         # Azure infrastructure (Bicep templates)
-├── .vscode/                       # VS Code configuration including MCP setup
-└── .github/                       # GitHub configuration
+├── host.json                      # Function host configuration
+├── local.settings.json            # Local dev settings (not for production source control)
+├── README.md                      # Project overview & included languages list
+├── TASKLIST.md                    # Work tracking / backlog (if present)
+├── Languages/                     # ALL language best-practice tool pairs live here
+│   ├── Csharp/                    #   csharp-best-practices.md + Csharp.cs
+│   ├── Python/                    #   python-best-practices.md + Python.cs
+│   ├── Vue3/                      #   vue3-best-practices.md + Vue3.cs
+│   ├── Javascript/                #   javascript-best-practices.md + Javascript.cs
+│   ├── Typescript/                #   typescript-best-practices.md + Typescript.cs
+│   ├── Go/ Java/ Rust/ ...        #   Additional languages (see directory for full list)
+│   └── (Cpp, Elixir, Flutter, Kotlin, Php, R, React, Ruby, Swift, NetAspire, etc.)
+├── Utilities/
+│   ├── FileCache.cs               # File caching & change detection
+│   └── ToolLogging.cs             # Shared logging utilities
+├── infra/                         # Azure Bicep templates & modules
+│   ├── main.bicep
+│   └── modules/                   #   apim, flexible plans, etc.
+├── docs/                          # Additional project documentation / analyses
+│   └── auto-update-approaches-analysis.md
+├── Properties/
+│   └── launchSettings.json        # Debug/launch configuration
+├── .github/                       # GitHub & Copilot instruction files
+├── .vscode/                       # VS Code tasks, MCP client configuration
+├── bin/                           # Build outputs (ignored in structure explanation)
+├── obj/                           # Intermediate build artifacts
+└── LICENSE                        # License file
 ```
 
 ### Key Project Details

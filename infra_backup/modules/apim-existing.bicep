@@ -1,95 +1,48 @@
-@description('Azure region to deploy to')
-param location string
-
-@description('Tags to apply to resources')
-param tags object = {}
-
-@description('API Management service name')
-param apimName string
-
-@description('API Management SKU')
-@allowed(['Consumption', 'Developer', 'Standard', 'Premium'])
-param apimSku string = 'Developer'
-
-@description('API Management publisher email')
-param publisherEmail string
-
-@description('API Management publisher name')
-param publisherName string = 'BestBot Team'
+@description('Existing API Management service name')
+param existingApimName string
 
 @description('Function App name to proxy to')
 param functionAppName string
 
-@description('Managed identity resource ID for APIM')
-param managedIdentityId string
+@description('API name for the MCP endpoints')
+param apiName string = 'bestbot-mcp-api'
 
-@description('Whether to enable VNet integration (optional)')
-param enableVnet bool = false
+@description('API path for the MCP endpoints')
+param apiPath string = 'mcp'
 
-@description('Subnet resource ID for VNet integration (required if enableVnet is true)')
-param subnetId string = ''
+@description('Product name for subscription management')
+param productName string = 'bestbot-mcp-product'
 
-// API Management service
-resource apim 'Microsoft.ApiManagement/service@2023-05-01-preview' = {
-  name: apimName
-  location: location
-  tags: tags
-  sku: {
-    name: apimSku
-    capacity: apimSku == 'Consumption' ? 0 : 1
-  }
-  identity: {
-    type: 'UserAssigned'
-    userAssignedIdentities: {
-      '${managedIdentityId}': {}
-    }
-  }
+// Reference existing API Management service (must be in same resource group)
+resource existingApim 'Microsoft.ApiManagement/service@2023-05-01-preview' existing = {
+  name: existingApimName
+}
+
+// API Version Set
+resource mcpVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2023-05-01-preview' = {
+  parent: existingApim
+  name: 'bestbot-mcp-version-set'
   properties: {
-    publisherEmail: publisherEmail
-    publisherName: publisherName
-    virtualNetworkType: enableVnet ? 'Internal' : 'None'
-    virtualNetworkConfiguration: enableVnet ? {
-      subnetResourceId: subnetId
-    } : null
-    apiVersionConstraint: {
-      minApiVersion: '2019-12-01'
-    }
-    customProperties: {
-      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls10': 'False'
-      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Tls11': 'False'
-      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Protocols.Ssl30': 'False'
-      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls10': 'False'
-      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Tls11': 'False'
-      'Microsoft.WindowsAzure.ApiManagement.Gateway.Security.Backend.Protocols.Ssl30': 'False'
-    }
+    displayName: 'BestBot MCP API Versions'
+    versioningScheme: 'Segment'
+    versionHeaderName: 'Api-Version'
   }
 }
 
 // API for the Function App
 resource mcpApi 'Microsoft.ApiManagement/service/apis@2023-05-01-preview' = {
-  parent: apim
-  name: 'bestbot-mcp-api'
+  parent: existingApim
+  name: apiName
   properties: {
     displayName: 'BestBot MCP API'
     description: 'Model Context Protocol endpoints for BestBot'
-    path: 'mcp'
+    path: apiPath
     protocols: ['https']
     serviceUrl: 'https://${functionAppName}.azurewebsites.net'
     subscriptionRequired: true
     apiRevision: '1'
     apiVersion: 'v1'
     apiVersionSetId: mcpVersionSet.id
-  }
-}
-
-// API Version Set
-resource mcpVersionSet 'Microsoft.ApiManagement/service/apiVersionSets@2023-05-01-preview' = {
-  parent: apim
-  name: 'bestbot-mcp-version-set'
-  properties: {
-    displayName: 'BestBot MCP API Versions'
-    versioningScheme: 'Segment'
-    versionHeaderName: 'Api-Version'
   }
 }
 
@@ -139,8 +92,8 @@ resource mcpToolsOperation 'Microsoft.ApiManagement/service/apis/operations@2023
 
 // Product for subscription management
 resource mcpProduct 'Microsoft.ApiManagement/service/products@2023-05-01-preview' = {
-  parent: apim
-  name: 'bestbot-mcp-product'
+  parent: existingApim
+  name: productName
   properties: {
     displayName: 'BestBot MCP Product'
     description: 'Product for accessing BestBot MCP APIs'
@@ -192,10 +145,12 @@ resource mcpApiPolicy 'Microsoft.ApiManagement/service/apis/policies@2023-05-01-
 }
 
 // Outputs
-output apimName string = apim.name
-output apimId string = apim.id
-output apimGatewayUrl string = 'https://${apim.properties.gatewayUrl}'
-output apimManagementUrl string = 'https://${apim.properties.managementApiUrl}'
-output apimDeveloperPortalUrl string = 'https://${apim.properties.developerPortalUrl}'
-output mcpApiPath string = '/mcp'
-output mcpEndpoint string = 'https://${apim.properties.gatewayUrl}/mcp'
+output apimName string = existingApim.name
+output apimId string = existingApim.id
+output apimGatewayUrl string = 'https://${existingApim.properties.gatewayUrl}'
+output apimManagementUrl string = 'https://${existingApim.properties.managementApiUrl}'
+output apimDeveloperPortalUrl string = 'https://${existingApim.properties.developerPortalUrl}'
+output mcpApiPath string = '/${apiPath}'
+output mcpEndpoint string = 'https://${existingApim.properties.gatewayUrl}/${apiPath}'
+output apiName string = mcpApi.name
+output productName string = mcpProduct.name

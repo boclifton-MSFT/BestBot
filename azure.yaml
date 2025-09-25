@@ -1,4 +1,4 @@
-name: bestpracmcp
+name: BestBot
 
 # Azure Developer CLI configuration
 infra:
@@ -7,6 +7,11 @@ infra:
   parameters:
     location: southcentralus
     environmentName: ${AZURE_ENV_NAME}
+  outputs:
+    functionAppName: AZURE_FUNCTIONAPP_NAME
+    zipDeployEndpoint: AZURE_FUNCTIONAPP_ZIP_DEPLOY_ENDPOINT
+    storageAccountName: AZURE_STORAGE_ACCOUNT_NAME
+    managedIdentityClientId: AZURE_MANAGED_IDENTITY_CLIENT_ID
 
 services:
   functionapp:
