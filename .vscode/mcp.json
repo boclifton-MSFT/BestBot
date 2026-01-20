@@ -20,11 +20,11 @@
   ],
   "servers": {
     "BestBot-Local": {
-      "url": "http://localhost:${input:function-port}/runtime/webhooks/mcp/sse",
+      "url": "http://localhost:${input:function-port}/runtime/webhooks/mcp",
       "type": "sse"
     },
     "BestBot-Azure": {
-      "url": "https://${input:function-base-url}/runtime/webhooks/mcp/sse",
+      "url": "https://${input:function-base-url}/runtime/webhooks/mcp",
       "type": "sse",
       "headers": {
         "x-functions-key": "${input:function-key}"
