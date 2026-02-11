@@ -1,3 +1,10 @@
+---
+language_version: "8.5"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://www.php.net/downloads"
+---
+
 # PHP Best Practices
 
 A comprehensive guide to writing clean, secure, and maintainable PHP based on PHP-FIG PSR standards, the official PHP manual, and modern PHP development patterns.

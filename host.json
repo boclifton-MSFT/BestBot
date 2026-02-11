@@ -1,6 +1,28 @@
 {
     "version": "2.0",
     "logging": {
+        "logLevel": {
+            "default": "Warning",
+            "Function": "Warning",
+            "Function.WeeklyUpdateCheck": "Information",
+            "Function.OrchestrateLanguageUpdates": "Warning",
+            "Function.dafx-LanguageUpdateAgent": "Error",
+            "Function.dafx-PrCreationAgent": "Error",
+            "Host.Aggregator": "Warning",
+            "Host.Results": "Warning",
+            "Host.Executor": "Error",
+            "Azure.Core": "Error",
+            "Azure.Storage": "Error",
+            "DurableTask.AzureStorage": "Warning",
+            "DurableTask.Core": "Warning",
+            "Microsoft.DurableTask": "Warning",
+            "Microsoft.Azure.WebJobs": "Error",
+            "Microsoft.Agents": "Error",
+            "Microsoft.Extensions.AI": "Error",
+            "OpenAI": "Error",
+            "System.ClientModel": "Error",
+            "BestPracticesMcp": "Information"
+        },
         "applicationInsights": {
             "samplingSettings": {
                 "isEnabled": true,
@@ -14,6 +36,16 @@
             "instructions": "Connect an MCP client to the server SSE endpoint (example: http://<server>/runtime/webhooks/mcp/sse) and invoke tools named get_<language>_best_practices (e.g. get_python_best_practices). Each tool returns the markdown content for that language's best practices.",
             "serverName": "Best Practices",
             "serverVersion": "1.0.0"
+        },
+        "durableTask": {
+            "storageProvider": {
+                "maxQueuePollingInterval": "00:00:10"
+            },
+            "tracing": {
+                "traceInputsAndOutputs": false
+            },
+            "extendedSessionsEnabled": true,
+            "extendedSessionIdleTimeoutInSeconds": 30
         }
     }
 }

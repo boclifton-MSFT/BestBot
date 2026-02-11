@@ -1,3 +1,10 @@
+---
+language_version: "1.18"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://elixir-lang.org/downloads.html"
+---
+
 # Elixir Best Practices
 
 A comprehensive guide to writing maintainable, functional, and fault-tolerant Elixir applications based on the official Elixir documentation, OTP design principles, and community standards.

@@ -1,3 +1,10 @@
+---
+language_version: "3.5"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://github.com/vuejs/core/releases"
+---
+
 # Vue 3 Best Practices
 
 A comprehensive guide to building maintainable, performant, and scalable Vue 3 applications using the Composition API, single-file components, and the modern Vue ecosystem.

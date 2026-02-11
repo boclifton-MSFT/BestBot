@@ -1,3 +1,10 @@
+---
+language_version: "1.24"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://go.dev/dl/"
+---
+
 # Go Best Practices
 
 A comprehensive guide to writing idiomatic, maintainable, and efficient Go code based on authoritative Go documentation, community standards, and proven patterns from the Go ecosystem.

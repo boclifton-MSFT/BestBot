@@ -1,3 +1,10 @@
+---
+language_version: "13.0"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://dotnet.microsoft.com/download"
+---
+
 # C# Best Practices
 
 A comprehensive guide to writing maintainable, reliable, and idiomatic C# based on Microsoft's official documentation, .NET design guidelines, and Roslyn analyzer conventions.

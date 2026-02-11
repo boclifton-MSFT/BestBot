@@ -1,3 +1,10 @@
+---
+language_version: "6.1"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://swift.org/download/"
+---
+
 # Swift Best Practices
 
 A concise guide for writing maintainable, performant, and idiomatic Swift code. These practices are based on Apple's official Swift documentation, Swift.org guidelines, and community-established conventions.

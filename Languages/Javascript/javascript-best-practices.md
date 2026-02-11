@@ -1,3 +1,10 @@
+---
+language_version: "ES2025"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://tc39.es/ecma262/"
+---
+
 # JavaScript Best Practices
 
 A comprehensive guide to writing maintainable, modern, and performant JavaScript based on ECMAScript standards, MDN Web Docs, and widely adopted community conventions.

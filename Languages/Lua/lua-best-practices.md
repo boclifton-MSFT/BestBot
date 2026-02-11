@@ -1,3 +1,10 @@
+---
+language_version: "5.4"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://www.lua.org/download.html"
+---
+
 # Lua Best Practices
 
 A comprehensive guide to writing idiomatic, maintainable, and efficient Lua code based on the official Lua documentation, the LuaRocks style guide, and established community conventions.

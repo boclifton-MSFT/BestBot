@@ -1,3 +1,10 @@
+---
+language_version: "5.7"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://www.typescriptlang.org/download"
+---
+
 # TypeScript Best Practices
 
 A comprehensive guide to writing maintainable, type-safe, and scalable TypeScript based on the official TypeScript documentation, community conventions, and widely adopted tooling standards.

@@ -1,3 +1,10 @@
+---
+language_version: "25"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://www.oracle.com/java/technologies/downloads/"
+---
+
 # Java Best Practices
 
 A comprehensive guide to writing maintainable, performant, and idiomatic Java based on Oracle documentation, the OpenJDK Developers' Guide, and the Google Java Style Guide.

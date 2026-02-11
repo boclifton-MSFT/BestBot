@@ -1,3 +1,10 @@
+---
+language_version: "3.4"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://www.ruby-lang.org/en/downloads/"
+---
+
 # Ruby Best Practices
 
 A comprehensive guide to writing maintainable, readable, and idiomatic Ruby based on the Ruby Style Guide, community conventions, and established ecosystem tooling.
