@@ -230,9 +230,8 @@ version: 1.0.0+1  # version+build_number
 
 ---
 
-## Minimal Example
+## Minimal example
 
-### Hello World App
 ```dart
 import 'package:flutter/material.dart';
 
@@ -246,112 +245,35 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({super.key, required this.title});
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            const Text('You have pushed the button this many times:'),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headlineMedium,
-            ),
-          ],
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
+      home: Scaffold(
+        appBar: AppBar(title: const Text('Hello Flutter')),
+        body: const Center(child: Text('Hello, world!')),
       ),
     );
   }
 }
 ```
 
-### Build and Test CI Example
 ```bash
-# Install dependencies
+# Build and test
 flutter pub get
-
-# Run static analysis
 flutter analyze
-
-# Format code
 dart format --set-exit-if-changed .
-
-# Run tests
 flutter test
-
-# Build for release
 flutter build apk --release
 ```
 
----
+## Further reading
 
-## Further Reading
-
-### Official Documentation
-- [Flutter Documentation](https://docs.flutter.dev/) - Comprehensive official documentation
-- [Dart Language Tour](https://dart.dev/guides/language/language-tour) - Complete Dart language guide
-- [Flutter Style Guide](https://docs.flutter.dev/guides/development/ui/widgets) - Official widget guidelines
-
-### Performance and Architecture
-- [Flutter Performance Best Practices](https://docs.flutter.dev/guides/performance/best-practices) - Official performance guidelines
-- [Effective Dart](https://dart.dev/guides/language/effective-dart) - Idiomatic Dart programming
-- [Flutter Architecture Samples](https://github.com/brianegan/flutter_architecture_samples) - Architecture pattern examples
-
-### Community Resources
-- [Pub.dev](https://pub.dev/) - Official package repository
-- [Flutter Community](https://flutter.dev/community) - Community resources and support
-- [Flutter Awesome](https://github.com/Solido/awesome-flutter) - Curated list of Flutter resources
-
-### Testing and Quality
-- [Flutter Testing Documentation](https://docs.flutter.dev/guides/testing) - Comprehensive testing guide
-- [Integration Testing](https://docs.flutter.dev/guides/testing/integration-tests) - End-to-end testing guide
-
----
+- [Flutter Documentation](https://docs.flutter.dev/) — comprehensive official guides
+- [Effective Dart](https://dart.dev/guides/language/effective-dart) — idiomatic Dart programming
+- [Flutter Performance Best Practices](https://docs.flutter.dev/guides/performance/best-practices) — official performance guidelines
 
 ## Resources
 
-- Flutter docs: https://docs.flutter.dev/
-- Dart language guide: https://dart.dev/guides
-- Pub.dev (packages): https://pub.dev/
-- Flutter testing docs: https://docs.flutter.dev/guides/testing
-- Security guidance for Flutter/Dart: https://cheatsheetseries.owasp.org/cheatsheets/Mobile_App_Security_Cheat_Sheet.html
-
----
-
-*Sources: Flutter.dev official documentation, Dart language guides, Flutter community best practices, and proven patterns from production Flutter applications.*
+- Flutter official documentation — https://docs.flutter.dev/
+- Dart language guide — https://dart.dev/guides
+- Effective Dart — https://dart.dev/guides/language/effective-dart
+- Pub.dev (packages) — https://pub.dev/
+- Flutter testing docs — https://docs.flutter.dev/guides/testing
+- Security guidance for Flutter/Dart — https://cheatsheetseries.owasp.org/cheatsheets/Mobile_App_Security_Cheat_Sheet.html

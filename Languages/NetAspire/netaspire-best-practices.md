@@ -238,6 +238,12 @@ jobs:
       run: dotnet test --no-build --verbosity normal
 ```
 
+## Further reading
+
+- [.NET Aspire Documentation](https://learn.microsoft.com/en-us/dotnet/aspire/) — official get-started guides and API reference
+- [.NET Aspire Samples](https://github.com/dotnet/aspire-samples) — example projects and templates
+- [OpenTelemetry .NET](https://opentelemetry.io/docs/languages/net/) — observability instrumentation for .NET
+
 ## Resources
 
 - Official .NET Aspire documentation: https://learn.microsoft.com/en-us/dotnet/aspire/

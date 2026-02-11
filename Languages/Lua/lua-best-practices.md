@@ -242,4 +242,4 @@ lua hello.lua
 - StyLua Formatter — https://github.com/JohnnyMorganz/StyLua
 - Busted Test Framework — https://lunarmodules.github.io/busted/
 - Programming in Lua (Book) — https://www.lua.org/pil/
-- Lua Users Wiki — http://lua-users.org/wiki/
+- Lua Users Wiki — https://lua-users.org/wiki/

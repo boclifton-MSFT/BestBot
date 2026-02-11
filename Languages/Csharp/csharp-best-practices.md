@@ -1,121 +1,184 @@
 # C# Best Practices
 
-A practical, opinionated reference for writing maintainable, reliable, and secure C# code. This document focuses on language and ecosystem best practices; combine it with framework-specific guidance (ASP.NET, Xamarin, MAUI, etc.) for application-level decisions.
+A comprehensive guide to writing maintainable, reliable, and idiomatic C# based on Microsoft's official documentation, .NET design guidelines, and Roslyn analyzer conventions.
 
-## Quick checklist
+## Overview
 
-- Prefer clarity over cleverness; name things for intent.
-- Keep methods small and focused; aim for single responsibility.
-- Favor immutable models for state where appropriate (records, readonly structs).
-- Embrace nullable reference types and annotate public APIs.
-- Use async/await consistently; accept CancellationToken on public async APIs.
-- Validate inputs early and fail fast with helpful messages.
-- Catch only what you can handle; preserve/propagate original exceptions when rethrowing.
-- Dispose of unmanaged and disposable resources deterministically (prefer `using` / `await using`).
-- Add logging for observable failures — avoid noisy logs in hot paths.
-- Run analyzers and formatters in CI to enforce standards.
+C# is a statically typed, object-oriented programming language developed by Microsoft as part of the .NET platform. It combines the robustness of a strong type system with modern language features including pattern matching, records, nullable reference types, async/await, and source generators. C# excels in building enterprise applications, cloud services, desktop apps, and game development with Unity. Its tight integration with the .NET runtime and extensive standard library make it a productive choice for professional, large-scale software.
 
----
+## When to use C# in projects
 
-## Naming, style and source layout
+- **Web APIs and microservices**: ASP.NET Core minimal APIs, controllers, gRPC
+- **Cloud-native services**: Azure Functions, Azure Container Apps, .NET Aspire
+- **Desktop applications**: WPF, WinUI 3, MAUI for cross-platform
+- **Game development**: Unity engine scripting
+- **Enterprise line-of-business**: Complex domain models, background workers
+- **CLI tools and automation**: System.CommandLine, Spectre.Console
+- **Libraries and SDKs**: NuGet packages with strong typing and IntelliSense
 
-- Types and public members: PascalCase. Locals and parameters: camelCase.
-- Prefer descriptive, intent-revealing names; avoid abbreviations and single-letter names except in small scopes (e.g. LINQ lambdas).
-- Keep one top-level public type per file when practical. File name should match the primary public type.
-- Use folders that map to namespaces and keep namespaces aligned with project structure.
-- Public API signatures should be stable and well-documented — prefer XML docs for libraries.
+## Tooling & ecosystem
 
-## Formatting and tooling
+### Core tools
+- **SDK**: [.NET SDK](https://dotnet.microsoft.com/) (includes compiler, runtime, CLI)
+- **IDE**: Visual Studio, VS Code with C# Dev Kit, JetBrains Rider
+- **Package manager**: [NuGet](https://www.nuget.org/) via `dotnet add package`
+- **Formatter**: `dotnet format` (built-in), EditorConfig
+- **Analyzers**: [Roslyn Analyzers](https://github.com/dotnet/roslyn-analyzers), StyleCop.Analyzers, SonarAnalyzer
 
-- Use `dotnet format` and enforce formatting in CI: "dotnet format --verify-no-changes".
-- Enable and configure Roslyn analyzers and code style rules; treat important analyzers as build-breakers in CI.
-- Use EditorConfig to set consistent rules across editors (.editorconfig in repo root).
-- Integrate StyleCop.Analyzers or other rule sets if your team follows stricter style rules.
+### Project setup
 
-## Nullability and types
+```bash
+dotnet new webapi -n MyApi
+cd MyApi
+dotnet build
+dotnet run
+```
 
-- Enable nullable reference types ("<Nullable>enable</Nullable>") at the project level and address warnings.
-- Prefer `string?` for parameters that accept null and `string` for non-nullable contracts; document semantics.
-- Use `ReadOnlySpan<T>` / `Span<T>` in performance-sensitive code to avoid allocations.
-- Prefer `enum` for closed sets of values. Use `Flags` sparingly and document bit-field semantics.
+## Recommended formatting & linters
 
-## Async/Concurrency
+### dotnet format (built-in, recommended)
 
-- Prefer async all the way: use `async`/`await` and avoid blocking (Task.Result/Wait) in async code paths.
-- Accept CancellationToken on public APIs that may be long-running; do not swallow cancellation requests.
-- Avoid capturing the SynchronizationContext unnecessarily; use `ConfigureAwait(false)` in library code where appropriate.
-- For parallel CPU-bound work, prefer `Parallel.ForEach` or `Task.Run` guarded by sensible degree-of-parallelism; prefer Channels or Dataflow for producer/consumer pipelines.
+```bash
+# Format code
+dotnet format
 
-## Error handling and exceptions
+# Verify formatting in CI
+dotnet format --verify-no-changes
+```
 
-- Use exceptions for exceptional conditions. Do not use exceptions for control flow.
-- Catch only those exceptions you can handle; otherwise let them propagate.
-- Wrap exceptions when adding context, using `throw new MyException("context", ex)` and preserve the original exception as InnerException.
-- Use custom exception types sparingly and only for cases where consumers must catch specific error classes.
-- Ensure library methods do not unexpectedly throw exceptions for normal operation; document thrown exceptions in XML docs.
+### EditorConfig
 
-## Resource management
+Place an `.editorconfig` at the repo root to enforce consistent rules across editors and CI:
 
-- Prefer `IDisposable` and `IAsyncDisposable` patterns; prefer `using` / `await using` for deterministic disposal.
-- For large object graphs, consider object pools (e.g., ArrayPool<T>) to reduce allocations.
-- Close and dispose unmanaged handles promptly; prefer SafeHandle-based wrappers for interop.
+```ini
+[*.cs]
+indent_style = space
+indent_size = 4
+dotnet_sort_system_directives_first = true
+csharp_style_var_for_built_in_types = false:suggestion
+```
 
-## Immutability and data modeling
+### Code style essentials
 
-- Use `record` types for immutable data carriers. For mutable domain models, use clear intent and encapsulation.
-- Prefer `readonly struct` for small value types that benefit from embedded semantics; avoid large structs.
-- When exposing collections from APIs, return `IReadOnlyList<T>` or `IEnumerable<T>` to prevent callers from mutating internal state.
+- Types and public members: `PascalCase`; locals and parameters: `camelCase`
+- Prefer descriptive, intent-revealing names; avoid abbreviations
+- One top-level public type per file; file name matches the primary type
+- Enable nullable reference types (`<Nullable>enable</Nullable>`) project-wide
+- Use `using` / `await using` for deterministic disposal of resources
 
-## API design guidance
+```csharp
+public record UserProfile(string Name, string Email)
+{
+    public string DisplayName => Name.Trim();
+}
+```
 
-- Design clear, minimal public surfaces. Prefer overloads that improve discoverability and maintain consistent parameter ordering.
-- Use argument validation helpers (Guard clauses) at API boundaries and throw `ArgumentException`, `ArgumentNullException`, or `ArgumentOutOfRangeException` as appropriate.
-- Consider semantic versioning and binding redirects for libraries. Avoid breaking changes in minor releases.
-- Use Task-returning methods for asynchronous APIs; avoid returning `void` for asynchronous operations except for event handlers.
+## Testing & CI recommendations
 
-## Testing, CI and code quality
+### xUnit + NSubstitute
 
-- Write unit tests for behavior and integration tests for contracts with external systems. Use test doubles to isolate dependencies.
-- Run static analysis, tests, format checks, and security scanning in CI. Fail builds on analyzer or test regressions.
-- Use coverage tools to ensure critical paths are exercised; aim for meaningful coverage without gaming metrics.
-- Run dependency vulnerability scans (e.g., dotnet list package --vulnerable) in CI.
+```bash
+dotnet new xunit -n MyApi.Tests
+dotnet add MyApi.Tests reference MyApi
+```
 
-## Performance and profiling
+Example test:
 
-- Measure before optimizing. Use BenchmarkDotNet for microbenchmarks and dotnet-trace/dotnet-counters for runtime profiling.
-- Avoid premature allocations in hot paths; prefer spans and pooling where measured improvements exist.
-- Use async streaming (IAsyncEnumerable<T>) to process large sequences efficiently with backpressure.
+```csharp
+using Xunit;
 
-## Security and secrets
+public class UserProfileTests
+{
+    [Fact]
+    public void DisplayName_TrimsWhitespace()
+    {
+        var profile = new UserProfile("  Alice  ", "alice@example.com");
+        Assert.Equal("Alice", profile.DisplayName);
+    }
 
-- Never commit secrets or credentials to source control. Use user secrets or environment variables for local development and secure stores (Key Vault, Azure Managed Identity) in production.
-- Sanitize and validate all external inputs. Use parameterized queries and avoid string concatenation for SQL.
-- Keep dependencies up to date and monitor for CVEs.
+    [Theory]
+    [InlineData("Bob", "Bob")]
+    [InlineData(" Carol ", "Carol")]
+    public void DisplayName_ReturnsExpected(string input, string expected)
+    {
+        var profile = new UserProfile(input, "test@test.com");
+        Assert.Equal(expected, profile.DisplayName);
+    }
+}
+```
 
-## Packaging and releases
+### CI configuration (GitHub Actions)
 
-- For libraries, produce symbols and source link to aid debugging. Ensure NuGet package metadata is accurate (description, license, repository URL).
-- Validate package contents to avoid shipping internal or unintended files.
-- Use semantic versioning and document breaking changes in release notes.
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 9.0.x
+      - run: dotnet restore
+      - run: dotnet build --no-restore
+      - run: dotnet format --verify-no-changes
+      - run: dotnet test --no-build --verbosity normal
+```
 
-## Logging and observability
+## Packaging & release guidance
 
-- Use structured logging (Microsoft.Extensions.Logging) and avoid string concatenation in log messages; prefer message templates.
-- Include correlation IDs and contextual properties for distributed tracing.
-- Avoid logging sensitive information; redact or omit secrets.
+- For libraries, emit symbols and enable Source Link to aid consumer debugging
+- Keep NuGet package metadata accurate (description, license, repository URL)
+- Use semantic versioning and document breaking changes in release notes
+- Produce both Debug and Release builds; only publish Release to NuGet
+- Validate package contents to avoid shipping internal or unintended files
 
----
+## Security & secrets best practices
+
+- Never commit secrets to source control; use user secrets (`dotnet user-secrets`) locally and Azure Key Vault or Managed Identity in production
+- Sanitize and validate all external inputs; use parameterized queries for SQL
+- Keep dependencies up to date; run `dotnet list package --vulnerable` in CI
+- Use `SecureString` sparingly; prefer short-lived credentials and token-based auth
+- Enable Roslyn security analyzers (CA2xxx rules) to detect common vulnerabilities
+
+## Recommended libraries
+
+| Need | Library | Notes |
+|------|---------|-------|
+| Web framework | [ASP.NET Core](https://learn.microsoft.com/aspnet/core/) | Minimal APIs or MVC controllers |
+| ORM | [Entity Framework Core](https://learn.microsoft.com/ef/core/) | Database access with LINQ |
+| HTTP client | [HttpClient](https://learn.microsoft.com/dotnet/fundamentals/networking/http/httpclient) | Built-in; use IHttpClientFactory |
+| Testing | [xUnit](https://xunit.net/) + [NSubstitute](https://nsubstitute.github.io/) | Unit testing and mocking |
+| Serialization | [System.Text.Json](https://learn.microsoft.com/dotnet/standard/serialization/system-text-json/) | High-performance JSON |
+| Logging | [Microsoft.Extensions.Logging](https://learn.microsoft.com/dotnet/core/extensions/logging) | Structured logging with providers |
+
+## Minimal example
+
+```csharp
+// Program.cs
+Console.WriteLine("Hello, C#!");
+```
+
+```bash
+dotnet new console -n HelloCsharp
+cd HelloCsharp && dotnet run
+# Output: Hello, World!
+```
+
+## Further reading
+
+- [.NET Design Guidelines](https://learn.microsoft.com/dotnet/standard/design-guidelines/) — framework and API design conventions
+- [Async guidance in depth](https://learn.microsoft.com/dotnet/standard/async-in-depth) — async/await patterns and pitfalls
+- [C# language reference](https://learn.microsoft.com/dotnet/csharp/language-reference/) — complete language specification
 
 ## Resources
 
-- Official C# docs: https://learn.microsoft.com/dotnet/csharp/
-- .NET guide and design guidelines: https://learn.microsoft.com/dotnet/standard/design-guidelines/
-- Roslyn analyzers: https://github.com/dotnet/roslyn-analyzers
-- .NET diagnostics and profiling: https://learn.microsoft.com/dotnet/core/diagnostics/
-- Async guidance: https://learn.microsoft.com/dotnet/standard/async-in-depth
-- Testing in .NET: https://learn.microsoft.com/dotnet/core/testing/
-- Security guidance for .NET: https://learn.microsoft.com/dotnet/standard/security/
-
----
-
-This document is intentionally pragmatic—adapt conventions to your project's needs and enforce them with tooling (analyzers, formatters, CI) so that style and correctness are automated and consistent across the team.
+- Official C# documentation — https://learn.microsoft.com/dotnet/csharp/
+- .NET design guidelines — https://learn.microsoft.com/dotnet/standard/design-guidelines/
+- Roslyn analyzers — https://github.com/dotnet/roslyn-analyzers
+- .NET diagnostics and profiling — https://learn.microsoft.com/dotnet/core/diagnostics/
+- Async guidance — https://learn.microsoft.com/dotnet/standard/async-in-depth
+- Testing in .NET — https://learn.microsoft.com/dotnet/core/testing/
+- Security guidance for .NET — https://learn.microsoft.com/dotnet/standard/security/
+- NuGet documentation — https://learn.microsoft.com/nuget/

@@ -1,137 +1,203 @@
 # PHP Best Practices
 
-A comprehensive guide to writing clean, secure, and maintainable PHP code. These practices are based on PHP-FIG standards, community recommendations, and modern PHP development patterns.
+A comprehensive guide to writing clean, secure, and maintainable PHP based on PHP-FIG PSR standards, the official PHP manual, and modern PHP development patterns.
 
-## Sources
-- PHP Manual — https://www.php.net/manual/en/
-- PHP-FIG (Framework Interop Group) — https://www.php-fig.org/
-- PSR Standards — https://www.php-fig.org/psr/
+## Overview
 
-## Quick Checklist
+PHP is a widely used server-side scripting language designed for web development. Modern PHP (8.0+) features a robust type system with union types, enums, readonly properties, fibers, and named arguments — making it far more expressive and safe than earlier versions. PHP powers a significant portion of the web through frameworks like Laravel and Symfony, content management systems like WordPress, and is well-suited for building web applications, APIs, and command-line tools. Its low barrier to entry, extensive hosting support, and mature ecosystem make it a practical choice for projects of all sizes.
 
-- Follow PSR-1, PSR-2, and PSR-12 coding standards for consistent formatting and style.
-- Use strict types by declaring `declare(strict_types=1);` at the top of files.
-- Validate and sanitize all user input; never trust external data.
-- Use type declarations for function parameters and return values.
-- Prefer dependency injection over global state and static methods.
-- Write comprehensive unit tests with PHPUnit or similar frameworks.
-- Use Composer for dependency management and autoloading.
-- Implement proper error handling with exceptions rather than error codes.
-- Use prepared statements for database queries to prevent SQL injection.
-- Keep functions and classes small and focused on a single responsibility.
+## When to use PHP in projects
 
----
+- **Web applications**: Laravel, Symfony, Slim for server-rendered or API-driven apps
+- **Content management**: WordPress, Drupal, and custom CMS solutions
+- **E-commerce**: WooCommerce, Magento, Shopware
+- **REST and GraphQL APIs**: Laravel, API Platform (Symfony)
+- **CLI scripts and automation**: Symfony Console, custom CLI tools
+- **Microservices**: Lightweight frameworks like Slim or Mezzio
+- **Legacy system modernization**: Incremental PHP version upgrades
 
-## Code Style and Standards
+## Tooling & ecosystem
 
-- Follow PSR-1 (Basic Coding Standard) and PSR-12 (Extended Coding Style) for formatting.
-- Use 4 spaces for indentation, not tabs.
-- Keep line length under 120 characters when possible.
-- Use camelCase for variables and methods, PascalCase for classes.
-- Place opening braces on the same line for methods and control structures.
-- Use meaningful names for variables, functions, and classes.
+### Core tools
+- **Runtime**: PHP 8.2+ (recommended; use latest stable)
+- **Package manager**: [Composer](https://getcomposer.org/) with `composer.json` and `composer.lock`
+- **Formatter**: [PHP CS Fixer](https://cs.symfony.com/) or [PHP_CodeSniffer](https://github.com/squizlabs/PHP_CodeSniffer)
+- **Static analysis**: [PHPStan](https://phpstan.org/), [Psalm](https://psalm.dev/)
+- **IDE**: PhpStorm, VS Code with Intelephense
 
-## Type Safety and Modern PHP
+### Project setup
 
-- Always use `declare(strict_types=1);` at the beginning of PHP files.
-- Declare parameter types and return types for all functions and methods.
-- Use nullable types (`?string`) when appropriate.
-- Prefer union types (`string|int`) over mixed types in PHP 8+.
-- Use readonly properties for immutable data in PHP 8.1+.
-- Leverage enums for fixed sets of values in PHP 8.1+.
+```bash
+composer init
+composer require --dev phpunit/phpunit phpstan/phpstan
+```
 
-## Security Best Practices
+## Recommended formatting & linters
 
-- Validate and sanitize all input data using filter functions or validation libraries.
-- Use prepared statements for database queries; never concatenate user input into SQL.
-- Escape output with `htmlspecialchars()` or similar functions to prevent XSS.
-- Use CSRF tokens for state-changing operations.
-- Store sensitive configuration in environment variables, not in code.
-- Use password_hash() and password_verify() for password handling.
-- Implement proper session security (secure cookies, regeneration, etc.).
+### PHP CS Fixer (recommended)
 
-## Database and SQL
+```bash
+composer require --dev friendsofphp/php-cs-fixer
+vendor/bin/php-cs-fixer fix src/
+```
 
-- Always use prepared statements with PDO or MySQLi.
-- Use transactions for multi-step database operations.
-- Implement proper connection pooling and error handling.
-- Avoid exposing database structure in error messages.
-- Use database migrations for schema changes.
-- Index frequently queried columns appropriately.
+Example `.php-cs-fixer.php`:
 
-## Error Handling and Logging
+```php
+<?php
+return (new PhpCsFixer\Config())
+    ->setRules([
+        '@PSR12' => true,
+        'strict_types' => true,
+        'array_syntax' => ['syntax' => 'short'],
+        'no_unused_imports' => true,
+    ])
+    ->setFinder(
+        PhpCsFixer\Finder::create()->in(__DIR__ . '/src')
+    );
+```
 
-- Use exceptions for error conditions rather than return codes.
-- Create custom exception classes for domain-specific errors.
-- Log errors appropriately but avoid logging sensitive information.
-- Use try-catch blocks judiciously; don't catch exceptions you can't handle.
-- Implement global exception handlers for unhandled exceptions.
-- Use PSR-3 compatible logging libraries like Monolog.
+### Code style essentials (PSR-12)
 
-## Object-Oriented Programming
+- Declare `strict_types=1` at the top of every file
+- 4-space indentation; `PascalCase` for classes, `camelCase` for methods/variables
+- Keep line length under 120 characters
+- Declare parameter types and return types for all functions
+- Use PHP 8.1+ enums for fixed value sets; readonly properties for immutable data
 
-- Follow SOLID principles for class design.
-- Use dependency injection containers for managing dependencies.
-- Prefer composition over inheritance.
-- Make classes and methods as small and focused as possible.
-- Use interfaces to define contracts and enable polymorphism.
-- Implement the Single Responsibility Principle for classes and methods.
+```php
+<?php
+declare(strict_types=1);
 
-## Performance and Optimization
+final class UserService
+{
+    public function __construct(
+        private readonly UserRepository ,
+    ) {}
 
-- Use OPcache in production environments.
-- Profile your application to identify bottlenecks before optimizing.
-- Cache expensive operations appropriately (Redis, Memcached, etc.).
-- Use lazy loading for heavy resources.
-- Optimize database queries and use appropriate indexes.
-- Consider using PHP 8+ features like JIT compilation when beneficial.
+    public function findByEmail(string ): ?User
+    {
+        return ->users->findOneBy(['email' => ]);
+    }
+}
+```
 
-## Testing and Quality Assurance
+## Testing & CI recommendations
 
-- Write unit tests with PHPUnit for critical business logic.
-- Use integration tests for testing component interactions.
-- Implement code coverage reporting and aim for meaningful coverage.
-- Use static analysis tools like PHPStan or Psalm for code quality.
-- Run automated tests in CI/CD pipelines.
-- Use tools like PHP_CodeSniffer for coding standard enforcement.
+### PHPUnit
 
-## Dependency Management
+```bash
+vendor/bin/phpunit tests/
+```
 
-- Use Composer for managing dependencies and autoloading.
-- Keep composer.json and composer.lock in version control.
-- Use semantic versioning constraints appropriately.
-- Regularly update dependencies but test thoroughly.
-- Use separate dev and production dependency groups.
-- Consider using private Packagist for proprietary packages.
+Example test:
 
-## Configuration and Environment
+```php
+<?php
+declare(strict_types=1);
 
-- Use environment variables for configuration that changes between environments.
-- Never commit sensitive data like passwords or API keys to version control.
-- Use configuration libraries like vlucas/phpdotenv for environment management.
-- Validate configuration values at application startup.
-- Use separate configuration files for different environments.
+use PHPUnit\Framework\TestCase;
 
-## Documentation and Comments
+final class UserServiceTest extends TestCase
+{
+    public function testFindByEmailReturnsUser(): void
+    {
+         = ->createMock(UserRepository::class);
+        ->method('findOneBy')->willReturn(new User('alice@example.com'));
 
-- Write clear, concise docblock comments for classes and public methods.
-- Use PHPDoc standards for documenting parameters, return types, and exceptions.
-- Keep comments up-to-date with code changes.
-- Document complex algorithms and business logic.
-- Avoid obvious comments that just restate the code.
-- Consider using documentation generators like phpDocumentor.
+         = new UserService();
+         = ->findByEmail('alice@example.com');
+
+        ->assertNotNull();
+        ->assertSame('alice@example.com', ->getEmail());
+    }
+}
+```
+
+### CI configuration (GitHub Actions)
+
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php-version: ['8.2', '8.3']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+      - run: composer install --no-progress
+      - run: vendor/bin/php-cs-fixer fix --dry-run --diff
+      - run: vendor/bin/phpstan analyse src/ --level=max
+      - run: vendor/bin/phpunit tests/
+```
+
+## Packaging & release guidance
+
+- Publish packages to Packagist with accurate `composer.json` metadata
+- Use PSR-4 autoloading for consistent class-to-file mapping
+- Follow semantic versioning and maintain a CHANGELOG
+- Keep `composer.lock` in version control for applications; omit it for libraries
+- Separate dev and production dependencies in `require-dev`
+
+## Security & secrets best practices
+
+- Validate and sanitize all input; never trust external data
+- Use prepared statements (PDO) for all database queries — never concatenate user input into SQL
+- Escape output with `htmlspecialchars()` to prevent XSS
+- Store secrets in environment variables; use `vlucas/phpdotenv` for local development
+- Use `password_hash()` and `password_verify()` for password handling
+- Implement CSRF tokens for state-changing operations
+- Keep PHP and dependencies updated; run `composer audit` for vulnerability scanning
+
+## Recommended libraries
+
+| Need | Library | Notes |
+|------|---------|-------|
+| Web framework | [Laravel](https://laravel.com/) / [Symfony](https://symfony.com/) | Full-stack / component-based |
+| HTTP client | [Guzzle](https://docs.guzzlephp.org/) | PSR-18 compliant HTTP |
+| Testing | [PHPUnit](https://phpunit.de/) + [Mockery](https://github.com/mockery/mockery) | Unit testing and mocking |
+| Static analysis | [PHPStan](https://phpstan.org/) / [Psalm](https://psalm.dev/) | Type-level bug detection |
+| Logging | [Monolog](https://github.com/Seldaek/monolog) | PSR-3 compliant logging |
+| Templating | [Blade](https://laravel.com/docs/blade) / [Twig](https://twig.symfony.com/) | Template engines |
+
+## Minimal example
+
+```php
+<?php
+// hello.php
+declare(strict_types=1);
+
+function greet(string  = 'world'): string
+{
+    return "Hello, {}!";
+}
+
+echo greet('PHP') . PHP_EOL;
+```
+
+```bash
+php hello.php
+# Output: Hello, PHP!
+```
+
+## Further reading
+
+- [PHP The Right Way](https://phptherightway.com/) — community-curated modern PHP best practices
+- [PSR Standards](https://www.php-fig.org/psr/) — PHP-FIG interoperability standards
+- [Laracasts](https://laracasts.com/) — video tutorials for Laravel and modern PHP
 
 ## Resources
 
-- PHP Manual: https://www.php.net/manual/en/
-- PHP-FIG / PSR standards: https://www.php-fig.org/
-- Composer: https://getcomposer.org/
-- Testing with PHPUnit: https://phpunit.de/
-- Security best practices (OWASP PHP): https://cheatsheetseries.owasp.org/cheatsheets/PHP_Security_Cheat_Sheet.html
-
-Minimal Fallback (if file unavailable)
-- Follow PSR standards for consistent code style
-- Use strict types and type declarations
-- Validate all input and escape all output
-- Use prepared statements for database queries
-- Write comprehensive tests and use static analysis tools
+- PHP Manual — https://www.php.net/manual/en/
+- PHP-FIG / PSR standards — https://www.php-fig.org/
+- Composer package manager — https://getcomposer.org/
+- PHPUnit testing framework — https://phpunit.de/
+- PHPStan static analysis — https://phpstan.org/
+- Laravel documentation — https://laravel.com/docs/
+- OWASP PHP Security Cheat Sheet — https://cheatsheetseries.owasp.org/cheatsheets/PHP_Security_Cheat_Sheet.html
+- Packagist (package registry) — https://packagist.org/

@@ -1,180 +1,183 @@
 # Elixir Best Practices
 
-A concise, opinionated checklist for writing maintainable, functional, and fault-tolerant Elixir code. These practices are based on the official Elixir documentation, OTP design principles, and community standards.
+A comprehensive guide to writing maintainable, functional, and fault-tolerant Elixir applications based on the official Elixir documentation, OTP design principles, and community standards.
 
-## Quick checklist
+## Overview
 
-- Follow Elixir's naming conventions: snake_case for variables/functions, PascalCase for modules.
-- Use pattern matching instead of conditional statements when possible.
-- Embrace immutability; avoid mutating data structures.
-- Design for fault tolerance with supervision trees and "let it crash" philosophy.
-- Use GenServer and other OTP behaviors for stateful processes.
-- Write comprehensive doctests alongside regular tests.
-- Use pipe operator (|>) for data transformation chains.
-- Prefer small, focused functions that do one thing well.
-- Handle errors explicitly with {:ok, result} and {:error, reason} tuples.
-- Use async/await patterns with Task module for concurrent operations.
+Elixir is a dynamic, functional programming language built on the Erlang VM (BEAM). It combines Erlang's battle-tested concurrency model and fault-tolerance with a modern, Ruby-inspired syntax and powerful metaprogramming via macros. Elixir's key strengths are lightweight processes, supervision trees, hot code upgrades, and the pipe operator for clear data transformation pipelines. It excels in building concurrent, distributed, and fault-tolerant systems that run with low latency at scale.
 
----
+## When to use Elixir in projects
 
-## Code Style and Formatting
+- **Real-time web applications**: Phoenix LiveView for interactive UIs without JavaScript
+- **APIs and microservices**: Phoenix framework with JSON or GraphQL endpoints
+- **Chat and messaging**: High-concurrency connection handling (WhatsApp-style)
+- **IoT and embedded**: Nerves framework for embedded systems
+- **Data pipelines**: Broadway and GenStage for backpressure-aware data processing
+- **Distributed systems**: Multi-node clustering with built-in distribution
+- **Event-driven architectures**: Process-based event sourcing and CQRS
 
-- Use `mix format` for consistent code formatting and enforce it in CI.
-- Follow the 98-character line limit (configurable in `.formatter.exs`).
-- Use snake_case for variable names, function names, and file names.
-- Use PascalCase for module names and atoms representing module names.
-- Prefer explicit parentheses for function calls with multiple arguments.
-- Organize imports with alias, import, and use at the top of modules.
+## Tooling & ecosystem
 
-## Project Structure and Organization
+### Core tools
+- **Runtime**: BEAM (Erlang VM) with OTP
+- **Build tool**: [Mix](https://hexdocs.pm/mix/) (built-in project management, tasks, dependencies)
+- **Package manager**: [Hex](https://hex.pm/) with `mix.exs` and `mix.lock`
+- **Formatter**: `mix format` (built-in, opinionated)
+- **Documentation**: [ExDoc](https://hexdocs.pm/ex_doc/) with `@doc` and `@moduledoc`
 
-- Follow the standard Mix project layout: `lib/`, `test/`, `config/`, `priv/`.
-- Group related modules in subdirectories under `lib/`.
-- Use one module per file, with the file path matching the module name.
-- Keep application configuration in `config/` files (config.exs, dev.exs, prod.exs).
-- Place assets and non-code resources in `priv/`.
+### Project setup
 
-## Pattern Matching and Functions
-
-- Leverage pattern matching in function heads for control flow.
-- Use guard clauses to add constraints to pattern matches.
-- Define multiple function clauses for different input patterns.
-- Prefer pattern matching over conditional statements (if/case).
-- Use the match operator (=) to destructure and assert on data shapes.
-
-```elixir
-# Good: Pattern matching in function heads
-def process({:ok, data}), do: transform(data)
-def process({:error, reason}), do: handle_error(reason)
-
-# Good: Pattern matching with guards
-def calculate(x) when is_number(x) and x > 0, do: x * 2
-def calculate(_), do: {:error, :invalid_input}
+```bash
+mix new my_app
+cd my_app
+mix deps.get
+mix compile
 ```
 
-## Error Handling and Fault Tolerance
+## Recommended formatting & linters
 
-- Use tagged tuples {:ok, result} and {:error, reason} for explicit error handling.
-- Embrace the "let it crash" philosophy for unexpected errors.
-- Design supervision trees to restart failed processes.
-- Use `with` statements for happy path error handling chains.
-- Prefer `!` functions (like `File.read!`) only when you're certain of success.
+### mix format (built-in, recommended)
+
+```bash
+# Format all project files
+mix format
+
+# Check formatting in CI
+mix format --check-formatted
+```
+
+Configure in `.formatter.exs`:
 
 ```elixir
-# Good: Explicit error handling
-def safe_divide(a, b) do
-  case b do
-    0 -> {:error, :division_by_zero}
-    _ -> {:ok, a / b}
-  end
-end
+[
+  inputs: ["{mix,.formatter}.exs", "{config,lib,test}/**/*.{ex,exs}"],
+  line_length: 98
+]
+```
 
-# Good: Using 'with' for chaining operations
-def process_user(id) do
-  with {:ok, user} <- fetch_user(id),
-       {:ok, profile} <- fetch_profile(user),
-       {:ok, result} <- transform_data(profile) do
-    {:ok, result}
-  end
+### Code style essentials
+
+- `snake_case` for functions, variables, and file names; `PascalCase` for modules
+- Use the pipe operator (`|>`) for data transformation chains
+- Prefer pattern matching over conditional statements
+- Use guard clauses for type constraints on function heads
+- Organize module attributes: `alias`, `import`, `use` at the top
+
+```elixir
+defmodule MyApp.Greeter do
+  @moduledoc "Greeting functions."
+
+  @spec greet(String.t()) :: String.t()
+  def greet(name) when is_binary(name), do: "Hello, #{name}!"
+  def greet(_), do: {:error, :invalid_name}
 end
 ```
 
-## OTP and Process Design
+## Testing & CI recommendations
 
-- Use GenServer for stateful processes that need lifecycle management.
-- Implement proper supervision strategies (one_for_one, rest_for_one, one_for_all).
-- Design processes to be lightweight and focused on single responsibilities.
-- Use process links and monitors for process communication and health monitoring.
-- Prefer message passing over shared state for process communication.
+### ExUnit (built-in)
 
-## Data Transformation and Pipelines
-
-- Use the pipe operator (|>) for data transformation chains.
-- Prefer Enum functions over explicit recursion for list processing.
-- Use Stream for lazy evaluation of large datasets.
-- Leverage Elixir's immutable data structures effectively.
-
-```elixir
-# Good: Pipeline for data transformation
-users
-|> Enum.filter(&active?/1)
-|> Enum.map(&format_user/1)
-|> Enum.sort_by(& &1.name)
+```bash
+mix test
+mix test --cover
 ```
 
-## Testing and Documentation
-
-- Write doctests for functions to provide both tests and examples.
-- Use ExUnit for comprehensive test suites with clear test descriptions.
-- Test both success and failure scenarios for each function.
-- Use `setup` and `setup_all` for test data preparation.
-- Document modules and functions with `@doc` and `@moduledoc`.
+Example test with doctests:
 
 ```elixir
-@doc """
-Calculates the area of a circle given its radius.
+defmodule MyApp.GreeterTest do
+  use ExUnit.Case, async: true
+  doctest MyApp.Greeter
 
-## Examples
+  describe "greet/1" do
+    test "returns greeting for valid name" do
+      assert MyApp.Greeter.greet("Elixir") == "Hello, Elixir!"
+    end
 
-    iex> Circle.area(5)
-    78.53981633974483
-
-    iex> Circle.area(0)
-    0
-"""
-def area(radius), do: :math.pi() * radius * radius
+    test "returns error for non-string input" do
+      assert MyApp.Greeter.greet(42) == {:error, :invalid_name}
+    end
+  end
+end
 ```
 
-## Performance and Optimization
+### CI configuration (GitHub Actions)
 
-- Profile before optimizing; use tools like `:observer` and `mix profile.eprof`.
-- Prefer tail recursion for recursive functions to avoid stack overflow.
-- Use binary pattern matching for efficient string processing.
-- Consider using ETS or Agent for in-memory state when appropriate.
-- Leverage BEAM's concurrent processing capabilities with Task and GenStage.
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: 27
+          elixir-version: 1.17
+      - run: mix deps.get
+      - run: mix format --check-formatted
+      - run: mix compile --warnings-as-errors
+      - run: mix test --cover
+```
 
-## Dependencies and Configuration
+## Packaging & release guidance
 
-- Use `mix deps.get` and lock versions in `mix.lock` for reproducible builds.
-- Keep dependencies minimal and prefer established, well-maintained libraries.
-- Use configuration for environment-specific settings, not application logic.
-- Prefer compile-time configuration when possible for better performance.
+- Publish libraries to Hex with `mix hex.publish`
+- Use `mix release` for self-contained production releases (OTP releases)
+- Document all public modules and functions with `@doc` and `@moduledoc`
+- Follow semantic versioning; maintain a CHANGELOG
+- Use `@spec` type specifications for all public functions
 
-## Concurrency and Distribution
+## Security & secrets best practices
 
-- Use Task for fire-and-forget concurrent operations.
-- Implement backpressure with GenStage for data processing pipelines.
-- Use Registry for process discovery and PubSub for event distribution.
-- Design for horizontal scaling with distributed Erlang when needed.
+- Store secrets in environment variables; use `config/runtime.exs` for runtime config
+- Validate and sanitize all external inputs at application boundaries
+- Use Ecto changesets for data validation and type casting
+- Avoid string interpolation with user input in queries; use parameterized queries
+- Keep dependencies updated; run `mix hex.audit` to scan for vulnerabilities
+- Never log sensitive data (passwords, tokens, PII)
 
-## Security and Input Validation
+## Recommended libraries
 
-- Validate and sanitize all external inputs at application boundaries.
-- Use Ecto changesets for data validation and type casting.
-- Avoid string interpolation with user input; use parameterized queries.
-- Implement proper authentication and authorization patterns.
+| Need | Library | Notes |
+|------|---------|-------|
+| Web framework | [Phoenix](https://www.phoenixframework.org/) | Full-stack with LiveView |
+| Database | [Ecto](https://hexdocs.pm/ecto/) | Database wrapper and query DSL |
+| HTTP client | [Req](https://hexdocs.pm/req/) / [Tesla](https://hexdocs.pm/tesla/) | Modern / middleware-based |
+| Background jobs | [Oban](https://hexdocs.pm/oban/) | Postgres-backed job processing |
+| Testing | [ExUnit](https://hexdocs.pm/ex_unit/) (built-in) | Concurrent test framework |
+| Data pipelines | [Broadway](https://hexdocs.pm/broadway/) | Multi-stage data ingestion |
 
-## Common Anti-patterns to Avoid
+## Minimal example
 
-- Don't use processes for computational tasks; processes are for state and fault tolerance.
-- Avoid deep nesting of case statements; use function clauses instead.
-- Don't ignore function return values, especially error tuples.
-- Avoid large GenServer state; consider breaking into smaller processes.
-- Don't use `throw/catch` for normal control flow; reserve for exceptional cases.
+```elixir
+# hello.exs
+defmodule Hello do
+  def greet(name \\ "world"), do: "Hello, #{name}!"
+end
+
+IO.puts(Hello.greet("Elixir"))
+```
+
+```bash
+elixir hello.exs
+# Output: Hello, Elixir!
+```
+
+## Further reading
+
+- [Elixir Getting Started Guide](https://elixir-lang.org/getting-started/introduction.html) — official language tutorial
+- [Programming Elixir by Dave Thomas](https://pragprog.com/titles/elixir16/programming-elixir-1-6/) — comprehensive language guide
+- [OTP Design Principles](https://erlang.org/doc/design_principles/des_princ.html) — supervision, GenServer, and fault tolerance
 
 ## Resources
 
-- Elixir Official Documentation: https://elixir-lang.org/docs.html
-- HexDocs: https://hexdocs.pm/
-- Elixir Style Guide: https://github.com/christopheradams/elixir_style_guide
-- OTP Design Principles: https://erlang.org/doc/design_principles/des_princ.html
-- Testing with ExUnit docs: https://hexdocs.pm/ex_unit/
-- Security guidance for Elixir/Erlang: https://erlang.org/doc/security
-
----
-
-Minimal Fallback (if file unavailable)
-- Use pattern matching and immutable data
-- Design with supervision trees and fault tolerance
-- Write doctests and comprehensive tests
-- Follow OTP conventions and behaviors
+- Elixir official documentation — https://elixir-lang.org/docs.html
+- HexDocs (package documentation) — https://hexdocs.pm/
+- Hex package registry — https://hex.pm/
+- Phoenix framework — https://www.phoenixframework.org/
+- Elixir Style Guide — https://github.com/christopheradams/elixir_style_guide
+- OTP Design Principles — https://erlang.org/doc/design_principles/des_princ.html
+- ExUnit testing docs — https://hexdocs.pm/ex_unit/
+- Elixir Forum (community) — https://elixirforum.com/

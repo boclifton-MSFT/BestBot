@@ -1,67 +1,200 @@
 # Java Best Practices
 
-This document condenses authoritative guidance from Oracle Java documentation, the OpenJDK Developers’ Guide, and the Google Java Style Guide into concise, actionable best-practices for writing maintainable, idiomatic Java.
+A comprehensive guide to writing maintainable, performant, and idiomatic Java based on Oracle documentation, the OpenJDK Developers' Guide, and the Google Java Style Guide.
 
-Sources
-- Oracle Java Code Conventions — https://www.oracle.com/java/technologies/javase/codeconvtoc-136057.html
-- OpenJDK Developers’ Guide — https://openjdk.org/guide/
-- Google Java Style Guide — https://google.github.io/styleguide/javaguide.html
+## Overview
 
-Key Practices
+Java is a statically typed, object-oriented, platform-independent programming language that runs on the Java Virtual Machine (JVM). With its strong type system, garbage collection, mature ecosystem, and "write once, run anywhere" philosophy, Java powers enterprise backends, Android applications, distributed systems, and large-scale data processing. Modern Java (17+) includes records, sealed classes, pattern matching, and virtual threads, making the language increasingly expressive while retaining backward compatibility.
 
-1. Project & Source Layout
-- Use a canonical, Maven/Gradle-compatible directory layout (src/main/java, src/test/java).
-- Keep package names all-lowercase and reverse-domain prefixed (e.g., com.example.project).
+## When to use Java in projects
 
-2. Formatting & Style
-- Follow a consistent formatter (google-java-format or equivalent) and enforce it in CI.
-- Use 2-space or 4-space indentation consistently; prefer 2 spaces only when project-wide convention demands it — default to 4 spaces.
-- Respect a column limit (100 chars per Google guide) and wrap long expressions at high syntactic boundaries.
-- Avoid wildcard imports; keep imports explicit and sorted.
+- **Enterprise backends and microservices**: Spring Boot, Quarkus, Jakarta EE
+- **Android development**: Native Android apps (though Kotlin is now preferred)
+- **Large-scale distributed systems**: Kafka, Hadoop, Spark, Cassandra
+- **Financial and banking systems**: Mission-critical transactional processing
+- **Cloud-native services**: Containerized services on Kubernetes
+- **Data-intensive applications**: Batch processing, ETL pipelines
+- **API services**: RESTful and gRPC services with strong typing
 
-3. Naming & Structure
-- Class names: UpperCamelCase; method/field/variable names: lowerCamelCase; constants: UPPER_SNAKE_CASE.
-- One top-level class per file; order members logically and keep related overloads grouped.
+## Tooling & ecosystem
 
-4. Immutability & API Design
-- Prefer immutable types for value objects (use final fields, private constructors, builders or records when appropriate).
-- Keep public APIs stable and document expectations via Javadoc.
+### Core tools
+- **JDK**: OpenJDK (Adoptium/Temurin), Oracle JDK, Amazon Corretto
+- **Build tools**: [Maven](https://maven.apache.org/) (convention-based), [Gradle](https://gradle.org/) (flexible, Kotlin DSL)
+- **IDE**: IntelliJ IDEA, VS Code with Extension Pack for Java, Eclipse
+- **Formatter**: [google-java-format](https://github.com/google/google-java-format), [Spotless](https://github.com/diffplug/spotless)
+- **Static analysis**: [SpotBugs](https://spotbugs.github.io/), [Error Prone](https://errorprone.info/), [SonarQube](https://www.sonarsource.com/products/sonarqube/)
 
-5. Exception Handling
-- Catch only exceptions you can handle; avoid swallowing exceptions silently.
-- Use descriptive exception messages and preserve the original exception as a cause when rethrowing.
+### Project setup (Maven)
 
-6. Concurrency
-- Prefer standard concurrency utilities from java.util.concurrent (Executors, CompletableFuture, ConcurrentHashMap) over low-level threads.
-- Document thread-safety expectations for public classes.
+```bash
+mvn archetype:generate \
+  -DgroupId=com.example \
+  -DartifactId=my-app \
+  -DarchetypeArtifactId=maven-archetype-quickstart \
+  -DinteractiveMode=false
 
-7. Performance & Resource Management
-- Use try-with-resources for AutoCloseable resources to ensure deterministic cleanup.
-- Measure before optimizing; prefer clarity over micro-optimizations.
+cd my-app && mvn compile
+```
 
-8. Testing
-- Write fast, deterministic unit tests; use integration tests only where necessary.
-- Favor behavior-focused tests and isolate external dependencies via test doubles or test containers.
+## Recommended formatting & linters
 
-9. Tooling
-- Use static analysis and linters (SpotBugs, Error Prone, SonarCloud) to catch common defects.
-- Enforce formatting and compile checks in CI (google-java-format, javac with -Werror for strictness when desired).
+### google-java-format (recommended)
 
-10. Documentation
-- Document public APIs using Javadoc; keep summary fragments brief and meaningful.
-- Use TODO comments with a bug reference or tracking link when leaving temporary work.
+```bash
+# Format files
+java -jar google-java-format.jar --replace src/**/*.java
 
-Minimal Fallback (if file unavailable)
-- Prefer small, focused classes
-- Use clear names and document behavior
-- Test behavior and edge cases
+# Enforce in CI with Spotless (Maven)
+mvn spotless:check
+```
+
+Example Spotless Maven plugin config:
+
+```xml
+<plugin>
+  <groupId>com.diffplug.spotless</groupId>
+  <artifactId>spotless-maven-plugin</artifactId>
+  <version>2.43.0</version>
+  <configuration>
+    <java>
+      <googleJavaFormat/>
+    </java>
+  </configuration>
+</plugin>
+```
+
+### Code style essentials
+
+- Use `UpperCamelCase` for classes, `lowerCamelCase` for methods/variables, `UPPER_SNAKE_CASE` for constants
+- One top-level class per file; keep imports explicit (no wildcards)
+- Prefer a 100-character column limit and wrap at high syntactic boundaries
+- Use canonical Maven/Gradle directory layout (`src/main/java`, `src/test/java`)
+- Use records for value objects, sealed classes for restricted hierarchies
+
+```java
+public record Point(double x, double y) {
+    public double distanceTo(Point other) {
+        double dx = this.x - other.x;
+        double dy = this.y - other.y;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+}
+```
+
+## Testing & CI recommendations
+
+### JUnit 5 + Mockito
+
+```xml
+<dependency>
+  <groupId>org.junit.jupiter</groupId>
+  <artifactId>junit-jupiter</artifactId>
+  <version>5.11.0</version>
+  <scope>test</scope>
+</dependency>
+```
+
+Example test:
+
+```java
+import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Test;
+
+class PointTest {
+    @Test
+    void distanceToSamePointIsZero() {
+        var p = new Point(3.0, 4.0);
+        assertEquals(0.0, p.distanceTo(p), 1e-9);
+    }
+
+    @Test
+    void distanceBetweenKnownPoints() {
+        var a = new Point(0, 0);
+        var b = new Point(3, 4);
+        assertEquals(5.0, a.distanceTo(b), 1e-9);
+    }
+}
+```
+
+### CI configuration (GitHub Actions)
+
+```yaml
+name: CI
+on: [push, pull_request]
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java-version: [17, 21]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          java-version: ${{ matrix.java-version }}
+          distribution: temurin
+      - run: mvn verify -B
+      - run: mvn spotless:check
+```
+
+## Packaging & release guidance
+
+- Use Maven Central or GitHub Packages for publishing artifacts
+- Build reproducible JARs with `maven-jar-plugin`; create fat JARs with `maven-shade-plugin` or Spring Boot plugin
+- Ship container images with multi-stage Docker builds using `eclipse-temurin` base images
+- Use semantic versioning and maintain a CHANGELOG
+- Enable `javac -Werror` for strict compilation in CI
+
+## Security & secrets best practices
+
+- Never embed secrets in source; use environment variables or a secrets manager (Azure Key Vault, HashiCorp Vault)
+- Use parameterized queries (PreparedStatement) to prevent SQL injection
+- Validate and sanitize all external input; use bean validation (`jakarta.validation`)
+- Use `try-with-resources` for `AutoCloseable` resources to prevent leaks
+- Keep dependencies updated; scan with OWASP Dependency-Check or Snyk
+- Avoid `ObjectInputStream.readObject()` with untrusted data (deserialization attacks)
+
+## Recommended libraries
+
+| Need | Library | Notes |
+|------|---------|-------|
+| Web framework | [Spring Boot](https://spring.io/projects/spring-boot) | De facto standard for microservices |
+| HTTP client | [java.net.http.HttpClient](https://docs.oracle.com/en/java/javase/21/docs/api/java.net.http/java/net/http/HttpClient.html) | Built-in since Java 11 |
+| JSON | [Jackson](https://github.com/FasterXML/jackson) / [Gson](https://github.com/google/gson) | Serialization / deserialization |
+| Testing | [JUnit 5](https://junit.org/junit5/) + [Mockito](https://site.mockito.org/) | Unit and integration testing |
+| Logging | [SLF4J](https://www.slf4j.org/) + [Logback](https://logback.qos.ch/) | Facade + implementation |
+| Dependency injection | [Spring](https://spring.io/) / [Guice](https://github.com/google/guice) | IoC containers |
+
+## Minimal example
+
+```java
+// Hello.java
+public class Hello {
+    public static void main(String[] args) {
+        System.out.println("Hello, Java!");
+    }
+}
+```
+
+```bash
+javac Hello.java && java Hello
+# Output: Hello, Java!
+```
+
+## Further reading
+
+- [Effective Java by Joshua Bloch](https://www.oreilly.com/library/view/effective-java/9780134686097/) — essential item-based guidance for writing better Java
+- [Google Java Style Guide](https://google.github.io/styleguide/javaguide.html) — detailed formatting and naming conventions
+- [Modern Java in Action](https://www.manning.com/books/modern-java-in-action) — streams, lambdas, and functional programming
 
 ## Resources
 
-- Oracle Java documentation: https://docs.oracle.com/javase/
-- OpenJDK Guide: https://openjdk.org/guide/
-- Google Java Style Guide: https://google.github.io/styleguide/javaguide.html
-- Effective Java (Joshua Bloch): https://www.pearson.com/
-- Testing guidance (JUnit): https://junit.org/junit5/docs/current/user-guide/
-- Security guidance for Java: https://cheatsheetseries.owasp.org/cheatsheets/Java_Security_Cheat_Sheet.html
-
+- Oracle Java documentation — https://docs.oracle.com/en/java/javase/21/
+- OpenJDK Developers' Guide — https://openjdk.org/guide/
+- Google Java Style Guide — https://google.github.io/styleguide/javaguide.html
+- JUnit 5 User Guide — https://junit.org/junit5/docs/current/user-guide/
+- Spring Boot reference — https://docs.spring.io/spring-boot/reference/
+- Maven documentation — https://maven.apache.org/guides/
+- OWASP Java Security Cheat Sheet — https://cheatsheetseries.owasp.org/cheatsheets/Java_Security_Cheat_Sheet.html
+- Error Prone static analysis — https://errorprone.info/

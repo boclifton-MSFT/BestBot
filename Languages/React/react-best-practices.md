@@ -266,6 +266,12 @@ npm test -- --coverage --watchAll=false
 npm run build
 ```
 
+## Further reading
+
+- [React Documentation](https://react.dev/) — official API reference and guides
+- [Thinking in React](https://react.dev/learn/thinking-in-react) — foundational design approach
+- [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/) — TypeScript patterns for React
+
 ## Resources
 
 - React official documentation: https://react.dev/
