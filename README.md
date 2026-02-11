@@ -70,6 +70,10 @@ The repository currently contains these language resources and corresponding MCP
   - Resource: `Languages/Kotlin/kotlin-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Kotlin.cs`)
 
+- Lua
+  - Resource: `Languages/Lua/lua-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Lua.cs`)
+
 - Go
   - Resource: `Languages/Go/go-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Go.cs`)
