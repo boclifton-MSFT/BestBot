@@ -76,8 +76,17 @@ var updateAgentTools = new List<AITool>
 };
 
 // Read repo config for agent instructions
-string repoOwner = Environment.GetEnvironmentVariable("UpdateWorker__GitHubRepoOwner") ?? "boclifton-MSFT";
-string repoName = Environment.GetEnvironmentVariable("UpdateWorker__GitHubRepoName") ?? "BestBot";
+string? repoOwner = Environment.GetEnvironmentVariable("UpdateWorker__GitHubRepoOwner");
+if (string.IsNullOrWhiteSpace(repoOwner))
+{
+    throw new InvalidOperationException("UpdateWorker__GitHubRepoOwner environment variable must be set to the target GitHub repository owner.");
+}
+
+string? repoName = Environment.GetEnvironmentVariable("UpdateWorker__GitHubRepoName");
+if (string.IsNullOrWhiteSpace(repoName))
+{
+    throw new InvalidOperationException("UpdateWorker__GitHubRepoName environment variable must be set to the target GitHub repository name.");
+}
 string defaultBranch = Environment.GetEnvironmentVariable("UpdateWorker__DefaultBranch") ?? "main";
 
 // Create the LanguageUpdateAgent with only its own function tools
