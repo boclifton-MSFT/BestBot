@@ -9,17 +9,30 @@ using Microsoft.Agents.AI.Hosting.AzureFunctions;
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Builder;
 using Microsoft.Extensions.AI;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using OpenAI.Chat;
 
 var builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
 
+// Register UpdateWorker configuration
+builder.Services.Configure<UpdateWorkerOptions>(
+    builder.Configuration.GetSection(UpdateWorkerOptions.SectionName));
+
 builder.Services.AddSingleton<AzureOpenAIClient>(sp =>
 {
-    string endpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT") ?? throw new InvalidOperationException("AZURE_OPENAI_ENDPOINT environment variable is not set.");
+    var options = sp.GetRequiredService<IOptions<UpdateWorkerOptions>>().Value;
+    string endpoint = options.AzureOpenAIEndpoint;
+
+    if (string.IsNullOrWhiteSpace(endpoint))
+    {
+        throw new InvalidOperationException("UpdateWorker:AzureOpenAIEndpoint configuration is not set.");
+    }
+
     string apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_KEY") ?? string.Empty;
 
     // if apiKey is empty, use DefaultAzureCredential, otherwise use AzureKeyCredential
@@ -35,10 +48,6 @@ builder.Services.AddSingleton<AzureOpenAIClient>(sp =>
             new AzureKeyCredential(apiKey));
 });
 
-// Register UpdateWorker configuration
-builder.Services.Configure<UpdateWorkerOptions>(
-    builder.Configuration.GetSection(UpdateWorkerOptions.SectionName));
-
 // Register the GitHub MCP client for PR creation via remote MCP server
 builder.Services.AddSingleton<GithubMcpClient>();
 
@@ -49,7 +58,8 @@ builder.Services
 // Build the AzureOpenAIClient to create the agent
 var serviceProvider = builder.Services.BuildServiceProvider();
 var openAIClient = serviceProvider.GetRequiredService<AzureOpenAIClient>();
-string deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT") ?? "gpt-4o";
+var workerOptions = serviceProvider.GetRequiredService<IOptions<UpdateWorkerOptions>>().Value;
+string deploymentName = workerOptions.AzureOpenAIDeployment;
 
 // Initialize the GitHub MCP client and filter to only the 3 tools the PrCreationAgent needs.
 // The repos + pull_requests toolsets expose 30+ tools; passing all of them bloats the
@@ -76,18 +86,18 @@ var updateAgentTools = new List<AITool>
 };
 
 // Read repo config for agent instructions
-string? repoOwner = Environment.GetEnvironmentVariable("UpdateWorker__GitHubRepoOwner");
+string repoOwner = workerOptions.GitHubRepoOwner;
 if (string.IsNullOrWhiteSpace(repoOwner))
 {
-    throw new InvalidOperationException("UpdateWorker__GitHubRepoOwner environment variable must be set to the target GitHub repository owner.");
+    throw new InvalidOperationException("UpdateWorker:GitHubRepoOwner configuration must be set to the target GitHub repository owner.");
 }
 
-string? repoName = Environment.GetEnvironmentVariable("UpdateWorker__GitHubRepoName");
+string repoName = workerOptions.GitHubRepoName;
 if (string.IsNullOrWhiteSpace(repoName))
 {
-    throw new InvalidOperationException("UpdateWorker__GitHubRepoName environment variable must be set to the target GitHub repository name.");
+    throw new InvalidOperationException("UpdateWorker:GitHubRepoName configuration must be set to the target GitHub repository name.");
 }
-string defaultBranch = Environment.GetEnvironmentVariable("UpdateWorker__DefaultBranch") ?? "main";
+string defaultBranch = workerOptions.DefaultBranch;
 
 // Create the LanguageUpdateAgent with only its own function tools
 AIAgent updateAgent = AgentDefinitions.CreateUpdateAgent(openAIClient, new UpdateAgentConfig(deploymentName, updateAgentTools));
