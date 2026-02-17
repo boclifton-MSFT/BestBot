@@ -56,6 +56,10 @@ internal static class ResourceCheckTool
 
                 results.Add(new { url, statusCode, isAccessible, contentSnippet });
             }
+            catch (UriFormatException ex)
+            {
+                results.Add(new { url, statusCode = 0, isAccessible = false, contentSnippet = $"Error: Invalid URL format - {ex.Message}" });
+            }
             catch (HttpRequestException ex)
             {
                 results.Add(new { url, statusCode = 0, isAccessible = false, contentSnippet = $"Error: {ex.Message}" });
@@ -86,6 +90,10 @@ internal static class ResourceCheckTool
 
             var content = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
             return content.Length > 10000 ? content[..10000] : content;
+        }
+        catch (UriFormatException ex)
+        {
+            return $"Error: Invalid URL format - {ex.Message}";
         }
         catch (HttpRequestException ex)
         {
