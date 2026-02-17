@@ -74,4 +74,10 @@ internal static partial class UpdateWorkerLogging
 
     [LoggerMessage(EventId = 121, Level = LogLevel.Information, Message = "PR prompt estimate: {PromptChars} chars (~{EstimatedTokens} tokens)")]
     public static partial void PrPromptEstimate(ILogger logger, int promptChars, int estimatedTokens);
+
+    [LoggerMessage(EventId = 122, Level = LogLevel.Information, Message = "Update worker is disabled via configuration. OpenAI client and agents will not be initialized. MCP best-practices tools will continue to work.")]
+    public static partial void UpdateWorkerDisabledNoOpenAI(ILogger logger);
+
+    [LoggerMessage(EventId = 123, Level = LogLevel.Warning, Message = "AZURE_OPENAI_ENDPOINT environment variable is not set. Update worker functionality will not be available. MCP best-practices tools will continue to work.")]
+    public static partial void OpenAIEndpointNotSet(ILogger logger);
 }
