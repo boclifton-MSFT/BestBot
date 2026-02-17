@@ -63,7 +63,7 @@ Last updated: 2025-09-15
   - [x] Create `UpdateOrchestrator` — parallel fan-out, one agent session per language.
   - [x] Create AI agent function tools: `FrontmatterTool`, `VersionCheckTool`, `ResourceCheckTool`, `ContentHashTool`.
   - [x] Create `FrontmatterParser` service for YAML frontmatter read/write.
-  - [x] Create `GitHubPrActivity` — Octokit-based PR creation with branch and commit workflow.
+  - [x] Implement GitHub MCP-based PR creation workflow (branch, commit, and pull request creation).
   - [x] Register `LanguageUpdateAgent` in `Program.cs` using `ConfigureDurableAgents` and `AsAIAgent()`.
   - [x] Add source-generated logging via `UpdateWorkerLogging`.
   - [x] Configure `host.json` with Durable Task extension settings.
