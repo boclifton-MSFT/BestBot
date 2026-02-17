@@ -379,7 +379,7 @@ This will redeploy the infrastructure without APIM and remove IP restrictions fr
   - `Models/` — DTOs for configuration, inputs, and results.
   - `Services/` — YAML frontmatter parser and logging.
   - `FunctionTools/` — AI agent function tools (version check, resource check, frontmatter, content hash).
-  - `Activities/` — Durable Functions activity for GitHub PR creation.
+  - GitHub PR creation is handled by `PrCreationAgent` and `GithubMcpClient` within the Durable Agent orchestration (no separate `Activities/` folder).
   - `UpdateTimerTrigger.cs` — Weekly cron trigger.
   - `UpdateOrchestrator.cs` — Fan-out orchestration across all languages.
 - `./Utilities/` — shared helpers (logging, caching) such as `FileCache.cs` and `ToolLogging.cs` live here.
