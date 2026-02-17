@@ -105,7 +105,7 @@ BestBot includes a weekly automated update worker built on the Microsoft Agent F
    - **CheckResourceUrls** — Verify all URLs in the `## Resources` section are reachable and unchanged.
    - **FetchUrlContent** — Retrieve full page content from reference URLs for deeper analysis.
    - **CompareContentHash** — SHA-256 hash comparison to detect meaningful content drift.
-4. **PR creation** — If any language needs an update, `GitHubPrActivity` creates a branch (`auto-update/<date>`), commits the updated markdown files, and opens a pull request with a summary of changes.
+4. **PR creation** — If any language needs an update, the `PrCreationAgent` uses GitHub MCP tools to create a branch (`auto-update/<date>`), commit the updated markdown files, and open a pull request with a summary of changes.
 
 ### YAML frontmatter
 
