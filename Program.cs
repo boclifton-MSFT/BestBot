@@ -61,9 +61,20 @@ var requiredGithubTools = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     "push_files",           // repos toolset – push updated files in a single commit
     "create_pull_request",  // pull_requests toolset – open the PR
 };
-var githubMcpTools = (await githubMcpClient.GetToolsAsync().ConfigureAwait(false))
-    .Where(t => requiredGithubTools.Contains(t.Name))
-    .Cast<AITool>().ToList();
+List<AITool> githubMcpTools;
+try
+{
+    var allGithubTools = await githubMcpClient.GetToolsAsync().ConfigureAwait(false);
+    githubMcpTools = allGithubTools
+        .Where(t => requiredGithubTools.Contains(t.Name))
+        .Cast<AITool>()
+        .ToList();
+}
+catch (Exception ex)
+{
+    Console.WriteLine($"Warning: Failed to retrieve GitHub MCP tools during startup. PR creation tools will be disabled. Exception: {ex}");
+    githubMcpTools = new List<AITool>();
+}
 
 // Local function tools for the LanguageUpdateAgent (no GitHub MCP tools needed)
 var updateAgentTools = new List<AITool>
