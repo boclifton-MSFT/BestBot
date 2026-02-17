@@ -103,7 +103,7 @@ internal static class UpdateOrchestrator
             var prAgent = context.GetAgent(PrAgentName);
             var prSession = await prAgent.CreateSessionAsync().ConfigureAwait(true);
 
-            var prPrompt = BuildPrPrompt(updatesNeeded);
+            var prPrompt = BuildPrPrompt(updatesNeeded, request.TriggerTimeUtc);
             UpdateWorkerLogging.PrPromptEstimate(logger, prPrompt.Length, EstimateTokens(prPrompt.Length, charsPerToken));
 
             var prResponse = await prAgent.RunAsync<PrCreationResult>(
@@ -183,9 +183,11 @@ internal static class UpdateOrchestrator
     /// <summary>
     /// Builds a prompt for the PrCreationAgent with all update details.
     /// </summary>
-    private static string BuildPrPrompt(List<LanguageUpdateResult> updates)
+    /// <param name="updates">List of language updates that need to be included in the PR.</param>
+    /// <param name="triggerTime">The UTC timestamp when the orchestration was triggered.</param>
+    private static string BuildPrPrompt(List<LanguageUpdateResult> updates, DateTimeOffset triggerTime)
     {
-        var dateStamp = DateTimeOffset.UtcNow.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
+        var dateStamp = triggerTime.ToString("yyyy-MM-dd", System.Globalization.CultureInfo.InvariantCulture);
         var sb = new System.Text.StringBuilder();
 
         sb.AppendLine(System.Globalization.CultureInfo.InvariantCulture, $"Create a pull request for the following {updates.Count} language updates dated {dateStamp}.");

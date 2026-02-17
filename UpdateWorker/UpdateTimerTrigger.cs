@@ -73,6 +73,7 @@ internal sealed class UpdateTimerTrigger(
             Languages = inputs,
             MaxParallelAgentRuns = Math.Max(1, _options.MaxParallelAgentRuns),
             EstimatedCharsPerToken = Math.Clamp(_options.EstimatedCharsPerToken, 1, 12),
+            TriggerTimeUtc = DateTimeOffset.UtcNow,
         };
 
         // Start the durable orchestration
