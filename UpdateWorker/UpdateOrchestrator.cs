@@ -24,47 +24,73 @@ internal static class UpdateOrchestrator
     public static async Task<List<LanguageUpdateResult>> OrchestrateLanguageUpdates(
         [OrchestrationTrigger] TaskOrchestrationContext context)
     {
-        var inputs = context.GetInput<List<LanguageCheckInput>>() ?? [];
+        var request = context.GetInput<LanguageUpdateOrchestrationInput>() ?? new LanguageUpdateOrchestrationInput();
+        var inputs = request.Languages;
         var logger = context.CreateReplaySafeLogger(nameof(UpdateOrchestrator));
+        var maxParallelRuns = Math.Max(1, request.MaxParallelAgentRuns);
+        var charsPerToken = Math.Clamp(request.EstimatedCharsPerToken, 1, 12);
 
         UpdateWorkerLogging.OrchestrationStarted(logger, inputs.Count);
+        UpdateWorkerLogging.OrchestrationConfig(logger, maxParallelRuns, charsPerToken);
 
-        // Fan-out: create a parallel agent session for each language
-        var agentTasks = new List<Task<AgentResponse<LanguageUpdateResult>>>();
+        // Fan-out in bounded batches to reduce token-per-minute pressure.
         var agent = context.GetAgent(AgentName);
+        var results = new List<LanguageUpdateResult>(inputs.Count);
+        var totalPromptChars = 0;
 
-        foreach (var input in inputs)
+        for (var batchStart = 0; batchStart < inputs.Count; batchStart += maxParallelRuns)
         {
-            UpdateWorkerLogging.AgentSessionStarted(logger, input.LanguageName);
+            var batchSize = Math.Min(maxParallelRuns, inputs.Count - batchStart);
+            var agentTasks = new List<Task<AgentResponse<LanguageUpdateResult>>>(batchSize);
+            var batchInputs = new List<LanguageCheckInput>(batchSize);
 
-            var session = await agent.CreateSessionAsync().ConfigureAwait(true);
+            for (var i = 0; i < batchSize; i++)
+            {
+                var input = inputs[batchStart + i];
+                UpdateWorkerLogging.AgentSessionStarted(logger, input.LanguageName);
 
-            var prompt = BuildLanguagePrompt(input);
+                var session = await agent.CreateSessionAsync().ConfigureAwait(true);
 
-            var task = agent.RunAsync<LanguageUpdateResult>(
-                message: prompt,
-                session: session);
+                var prompt = BuildLanguagePrompt(input);
+                var promptChars = prompt.Length;
+                totalPromptChars += promptChars;
 
-            agentTasks.Add(task);
+                UpdateWorkerLogging.AgentPromptEstimate(
+                    logger,
+                    input.LanguageName,
+                    promptChars,
+                    EstimateTokens(promptChars, charsPerToken));
+
+                var task = agent.RunAsync<LanguageUpdateResult>(
+                    message: prompt,
+                    session: session);
+
+                agentTasks.Add(task);
+                batchInputs.Add(input);
+            }
+
+            await Task.WhenAll(agentTasks).ConfigureAwait(true);
+
+            for (var i = 0; i < agentTasks.Count; i++)
+            {
+                var agentResponse = await agentTasks[i].ConfigureAwait(true);
+                var result = agentResponse.Result;
+                var input = batchInputs[i];
+
+                // Ensure language name and file path are populated
+                result.LanguageName = input.LanguageName;
+                result.FilePath = input.FilePath;
+
+                UpdateWorkerLogging.AgentSessionCompleted(logger, result.LanguageName, result.NeedsUpdate);
+                results.Add(result);
+            }
         }
 
-        // Wait for all agent sessions to complete
-        await Task.WhenAll(agentTasks).ConfigureAwait(true);
-
-        // Collect results
-        var results = new List<LanguageUpdateResult>();
-        for (var i = 0; i < agentTasks.Count; i++)
-        {
-            var agentResponse = await agentTasks[i].ConfigureAwait(true);
-            var result = agentResponse.Result;
-
-            // Ensure language name and file path are populated
-            result.LanguageName = inputs[i].LanguageName;
-            result.FilePath = inputs[i].FilePath;
-
-            UpdateWorkerLogging.AgentSessionCompleted(logger, result.LanguageName, result.NeedsUpdate);
-            results.Add(result);
-        }
+        UpdateWorkerLogging.OrchestrationPromptEstimate(
+            logger,
+            totalPromptChars,
+            EstimateTokens(totalPromptChars, charsPerToken),
+            inputs.Count);
 
         // Filter to only languages that need updates
         var updatesNeeded = results.Where(r => r.NeedsUpdate).ToList();
@@ -78,6 +104,7 @@ internal static class UpdateOrchestrator
             var prSession = await prAgent.CreateSessionAsync().ConfigureAwait(true);
 
             var prPrompt = BuildPrPrompt(updatesNeeded);
+            UpdateWorkerLogging.PrPromptEstimate(logger, prPrompt.Length, EstimateTokens(prPrompt.Length, charsPerToken));
 
             var prResponse = await prAgent.RunAsync<PrCreationResult>(
                 message: prPrompt,
@@ -87,6 +114,16 @@ internal static class UpdateOrchestrator
         }
 
         return results;
+    }
+
+    private static int EstimateTokens(int chars, int charsPerToken)
+    {
+        if (chars <= 0)
+        {
+            return 0;
+        }
+
+        return (int)Math.Ceiling(chars / (double)Math.Max(1, charsPerToken));
     }
 
     /// <summary>

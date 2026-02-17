@@ -68,10 +68,17 @@ internal sealed class UpdateTimerTrigger(
             return;
         }
 
+        var orchestrationInput = new LanguageUpdateOrchestrationInput
+        {
+            Languages = inputs,
+            MaxParallelAgentRuns = Math.Max(1, _options.MaxParallelAgentRuns),
+            EstimatedCharsPerToken = Math.Clamp(_options.EstimatedCharsPerToken, 1, 12),
+        };
+
         // Start the durable orchestration
         var instanceId = await durableClient.ScheduleNewOrchestrationInstanceAsync(
             nameof(UpdateOrchestrator.OrchestrateLanguageUpdates),
-            inputs,
+            orchestrationInput,
             cancellationToken).ConfigureAwait(false);
 
         UpdateWorkerLogging.OrchestrationInstanceStarted(logger, instanceId);

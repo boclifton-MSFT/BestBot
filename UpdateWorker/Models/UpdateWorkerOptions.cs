@@ -43,4 +43,15 @@ internal sealed class UpdateWorkerOptions
     /// The default branch to create PRs against (e.g. "main").
     /// </summary>
     public string DefaultBranch { get; set; } = "main";
+
+    /// <summary>
+    /// Maximum number of language agent sessions to run concurrently per orchestration.
+    /// Lower values reduce token-per-minute pressure on the model deployment.
+    /// </summary>
+    public int MaxParallelAgentRuns { get; set; } = 2;
+
+    /// <summary>
+    /// Approximate number of characters per token used for lightweight token-budget estimation.
+    /// </summary>
+    public int EstimatedCharsPerToken { get; set; } = 4;
 }

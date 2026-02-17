@@ -62,4 +62,16 @@ internal static partial class UpdateWorkerLogging
 
     [LoggerMessage(EventId = 117, Level = LogLevel.Information, Message = "PR created at: {PrUrl}")]
     public static partial void PrCreatedAtUrl(ILogger logger, string prUrl);
+
+    [LoggerMessage(EventId = 118, Level = LogLevel.Information, Message = "Orchestration config: max parallel agent runs={MaxParallel}, estimated chars/token={CharsPerToken}")]
+    public static partial void OrchestrationConfig(ILogger logger, int maxParallel, int charsPerToken);
+
+    [LoggerMessage(EventId = 119, Level = LogLevel.Debug, Message = "Prompt estimate for {Language}: {PromptChars} chars (~{EstimatedTokens} tokens)")]
+    public static partial void AgentPromptEstimate(ILogger logger, string language, int promptChars, int estimatedTokens);
+
+    [LoggerMessage(EventId = 120, Level = LogLevel.Information, Message = "Prompt budget estimate for orchestration: {PromptChars} chars (~{EstimatedTokens} tokens) across {LanguageCount} languages")]
+    public static partial void OrchestrationPromptEstimate(ILogger logger, int promptChars, int estimatedTokens, int languageCount);
+
+    [LoggerMessage(EventId = 121, Level = LogLevel.Information, Message = "PR prompt estimate: {PromptChars} chars (~{EstimatedTokens} tokens)")]
+    public static partial void PrPromptEstimate(ILogger logger, int promptChars, int estimatedTokens);
 }
