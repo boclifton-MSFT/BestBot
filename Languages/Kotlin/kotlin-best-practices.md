@@ -1,3 +1,10 @@
+---
+language_version: "2.1"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://kotlinlang.org/docs/releases.html"
+---
+
 # Kotlin Best Practices
 
 A concise guide to writing clean, efficient Kotlin code across JVM, Android, Native, and Multiplatform projects.

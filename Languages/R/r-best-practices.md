@@ -1,3 +1,10 @@
+---
+language_version: "4.5"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://cran.r-project.org/"
+---
+
 # R Best Practices
 
 A comprehensive guide to writing maintainable, reliable, and efficient R code based on the Tidyverse Style Guide, R documentation, and community conventions.

@@ -49,11 +49,27 @@ Last updated: 2025-09-15
 
 ## Advanced Features (Phase 2)
 
-- [ ] **Expand** best-practices content to more languages (Go, Rust, Kotlin, etc.).
-  - [ ] **Design** per-language resource and tool contract.
-  - [ ] **Implement** tooling and tests for new language entries.
+- [x] **Expand** best-practices content to more languages (Go, Rust, Kotlin, etc.).
+  - [x] **Design** per-language resource and tool contract.
+  - [x] **Implement** tooling and tests for new language entries.
 - [ ] **Add** sample MCP client apps and automated validation scripts.
 - [ ] **Provide** templates for contributing guidelines, PR checks, and labeling automation.
+
+## Automated Update Worker (Phase 3)
+
+- [x] **Implement** weekly Durable Agent orchestration (`UpdateWorker/`) using Microsoft Agent Framework.
+  - [x] Add YAML frontmatter (language_version, last_checked, resource_hash, version_source_url) to all 19 language markdown files.
+  - [x] Create `UpdateTimerTrigger` — weekly cron trigger (Mondays 2 AM UTC).
+  - [x] Create `UpdateOrchestrator` — parallel fan-out, one agent session per language.
+  - [x] Create AI agent function tools: `FrontmatterTool`, `VersionCheckTool`, `ResourceCheckTool`, `ContentHashTool`.
+  - [x] Create `FrontmatterParser` service for YAML frontmatter read/write.
+  - [x] Implement GitHub MCP-based PR creation workflow (branch, commit, and pull request creation).
+  - [x] Register `LanguageUpdateAgent` in `Program.cs` using `ConfigureDurableAgents` and `AsAIAgent()`.
+  - [x] Add source-generated logging via `UpdateWorkerLogging`.
+  - [x] Configure `host.json` with Durable Task extension settings.
+- [ ] **Add** unit tests for `FrontmatterParser`, function tools, and orchestrator logic.
+- [ ] **Validate** end-to-end with Azure OpenAI endpoint and test GitHub token.
+- [ ] **Update** infrastructure (Bicep) to provision Azure OpenAI resource if needed.
 
 ## Discovered During Work
 

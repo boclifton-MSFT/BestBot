@@ -1,3 +1,10 @@
+---
+language_version: "3.14"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://www.python.org/downloads/"
+---
+
 # Python Best Practices
 
 A comprehensive guide to writing maintainable, readable, and Pythonic code based on PEPs, community standards, and proven patterns from the Python ecosystem.

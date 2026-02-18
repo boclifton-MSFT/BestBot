@@ -1,3 +1,10 @@
+---
+language_version: "3.27"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://docs.flutter.dev/release/archive"
+---
+
 # Flutter Best Practices
 
 A concise, opinionated checklist for writing maintainable, performant, and secure Flutter applications. These practices are based on official Flutter documentation, Dart language guides, and proven patterns from the Flutter community.

@@ -1,3 +1,10 @@
+---
+language_version: "19"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://github.com/facebook/react/releases"
+---
+
 # React Best Practices
 
 A comprehensive guide for writing maintainable, performant, and accessible React applications. These practices are based on official React documentation, community standards, and proven patterns from the React ecosystem.

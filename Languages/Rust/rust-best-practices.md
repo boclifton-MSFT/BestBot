@@ -1,3 +1,10 @@
+---
+language_version: "1.84"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://github.com/rust-lang/rust/releases"
+---
+
 # Rust Best Practices
 
 A concise, opinionated checklist for writing safe, performant, and maintainable Rust code. These practices focus on language features, tooling, and project structure to help you leverage Rust's ownership system and ecosystem effectively.

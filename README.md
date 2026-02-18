@@ -12,6 +12,7 @@ This repository is aimed at developers who want to contribute canonical best-pra
 - Lightweight process-wide file caching to minimize disk reads and serve cached content when the underlying file is unchanged.
 - Centralized, source-generated logging surface using `ToolLogging<T>` for consistent event messages across tools.
 - Simple, extensible pattern for adding more language tools.
+- **Automated update worker** — a weekly Durable Agent orchestration that checks each language's reference links, detects version changes (excluding beta/preview/prerelease), and opens a GitHub PR with updated content when needed.
 
 ## Included languages
 
@@ -89,6 +90,62 @@ The repository currently contains these language resources and corresponding MCP
 - .NET 9 SDK (required)
 - (Optional) Azure Functions Core Tools for local function host testing
 - (Optional) Azure Developer CLI (azd) — supported for provisioning and deploying this project. The repository includes an `azure.yaml` and Bicep templates under `infra/` so you can use `azd up` to create the required Azure resources and deploy the function app. (See "Quick start (developer)" for a sample `azd` workflow.)
+
+## Automated update worker
+
+BestBot includes a weekly automated update worker built on the Microsoft Agent Framework (Durable Agents). It checks every language's best-practices document for staleness and opens a GitHub PR when updates are needed.
+
+### How it works
+
+1. **Timer trigger** — `UpdateTimerTrigger` fires every Monday at 2 AM UTC (`0 0 2 * * 1`). It discovers all `Languages/*/<lang>-best-practices.md` files and starts a Durable orchestration.
+2. **Fan-out orchestration** — `UpdateOrchestrator` creates one Durable AI Agent session per language, running them in parallel. Each agent receives the language's current markdown content and a detailed prompt.
+3. **Agent-driven analysis** — Each `LanguageUpdateAgent` (backed by Azure OpenAI) uses function tools to:
+   - **ReadFrontmatter** — Parse YAML frontmatter (version, last-checked date, resource hash, version source URL).
+   - **CheckLatestVersion** — Fetch the version source URL and detect the latest stable release, skipping any beta/preview/prerelease versions.
+   - **CheckResourceUrls** — Verify all URLs in the `## Resources` section are reachable and unchanged.
+   - **FetchUrlContent** — Retrieve full page content from reference URLs for deeper analysis.
+   - **CompareContentHash** — SHA-256 hash comparison to detect meaningful content drift.
+4. **PR creation** — If any language needs an update, the `PrCreationAgent` uses GitHub MCP tools to create a branch (`auto-update/<date>`), commit the updated markdown files, and open a pull request with a summary of changes.
+
+### YAML frontmatter
+
+Each best-practices markdown file includes a YAML frontmatter block for version tracking:
+
+```yaml
+---
+language_version: "13.0"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://learn.microsoft.com/dotnet/csharp/whats-new/csharp-13"
+---
+```
+
+### Configuration
+
+Add the following settings to `local.settings.json` (or Azure App Settings):
+
+| Setting | Description | Default |
+|---------|-------------|---------|
+| `AZURE_OPENAI_ENDPOINT` | Azure OpenAI service endpoint | — |
+| `AZURE_OPENAI_DEPLOYMENT` | Chat model deployment name | `gpt-4o` |
+| `AZURE_OPENAI_KEY` | (Optional) API key; omit to use managed identity | — |
+| `UpdateWorker__Enabled` | Enable/disable the weekly worker | `true` |
+| `UpdateWorker__GitHubToken` | GitHub PAT with `repo` scope | — |
+| `UpdateWorker__GitHubRepoOwner` | Repository owner | — |
+| `UpdateWorker__GitHubRepoName` | Repository name | — |
+| `UpdateWorker__DefaultBranch` | Base branch for PRs | `main` |
+
+### Architecture
+
+```
+UpdateTimerTrigger (weekly cron)
+  └─► UpdateOrchestrator (Durable orchestration)
+        ├─► LanguageUpdateAgent (C#)      ─► function tools ─► result
+        ├─► LanguageUpdateAgent (Python)   ─► function tools ─► result
+        ├─► LanguageUpdateAgent (Go)       ─► function tools ─► result
+        │   ... (parallel, one per language)
+        └─► GitHubPrActivity (creates PR if any updates found)
+```
 
 ## Quick start (developer)
 
@@ -318,6 +375,13 @@ This will redeploy the infrastructure without APIM and remove IP restrictions fr
 - `./Languages/` — Each language is stored in a folder named for the language (e.g. `/Elixir`). This folder contains two files: 
   - A source markdown file containing best-practice guidance. 
   - A `<language-name>.cs` file containing the Azure Function code written in C#.
+- `./UpdateWorker/` — Automated weekly update worker using Microsoft Agent Framework Durable Agents.
+  - `Models/` — DTOs for configuration, inputs, and results.
+  - `Services/` — YAML frontmatter parser and logging.
+  - `FunctionTools/` — AI agent function tools (version check, resource check, frontmatter, content hash).
+  - GitHub PR creation is handled by `PrCreationAgent` and `GithubMcpClient` within the Durable Agent orchestration (no separate `Activities/` folder).
+  - `UpdateTimerTrigger.cs` — Weekly cron trigger.
+  - `UpdateOrchestrator.cs` — Fan-out orchestration across all languages.
 - `./Utilities/` — shared helpers (logging, caching) such as `FileCache.cs` and `ToolLogging.cs` live here.
 - `./infra/` — Bicep templates for Azure deployment (used by `azd` when deploying).
   - `main.bicep` — Main infrastructure template with conditional APIM deployment

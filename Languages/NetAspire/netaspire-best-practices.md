@@ -1,3 +1,10 @@
+---
+language_version: "13.1"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://aspire.dev/docs/"
+---
+
 # .NET Aspire Best Practices
 
 A comprehensive guide for building cloud-native applications with .NET Aspire. This document covers architectural patterns, tooling, deployment strategies, and best practices for creating distributed applications with .NET Aspire's cloud-native stack.
@@ -246,14 +253,11 @@ jobs:
 
 ## Resources
 
-- Official .NET Aspire documentation: https://learn.microsoft.com/en-us/dotnet/aspire/
+- Official .NET Aspire documentation: https://aspire.dev
 - .NET Aspire FAQ: https://learn.microsoft.com/en-us/dotnet/aspire/reference/aspire-faq
 - .NET Aspire blog posts: https://devblogs.microsoft.com/dotnet/category/dotnet-aspire/
 - .NET Aspire GitHub repository: https://github.com/dotnet/aspire
 - Aspire samples and templates: https://github.com/dotnet/aspire-samples
-- OpenTelemetry .NET documentation: https://opentelemetry.io/docs/languages/net/
-- Container security best practices: https://learn.microsoft.com/en-us/azure/container-instances/container-instances-image-security
-- Azure Container Apps with Aspire: https://learn.microsoft.com/en-us/azure/container-apps/aspire-overview
 
 ---
 

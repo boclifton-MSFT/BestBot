@@ -1,3 +1,10 @@
+---
+language_version: "C++23"
+last_checked: "2026-02-11"
+resource_hash: ""
+version_source_url: "https://isocpp.org/std/the-standard"
+---
+
 # C++ Best Practices
 
 A comprehensive guide to writing modern, maintainable, and secure C++ code. These practices are derived from authoritative sources including the C++ Core Guidelines, Google C++ Style Guide, and ISO C++ standards documentation.
