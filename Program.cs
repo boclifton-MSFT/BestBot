@@ -13,6 +13,7 @@ using Microsoft.Extensions.AI;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
 using OpenAI.Chat;
 
@@ -23,6 +24,34 @@ builder.ConfigureFunctionsWebApplication();
 // Register UpdateWorker configuration
 builder.Services.Configure<UpdateWorkerOptions>(
     builder.Configuration.GetSection(UpdateWorkerOptions.SectionName));
+
+builder.Services.AddSingleton<AzureOpenAIClient>(sp =>
+{
+    var options = sp.GetRequiredService<IOptions<UpdateWorkerOptions>>().Value;
+    string endpoint = options.AzureOpenAIEndpoint;
+
+    if (string.IsNullOrWhiteSpace(endpoint))
+    {
+        throw new InvalidOperationException("UpdateWorker:AzureOpenAIEndpoint configuration is not set.");
+    }
+
+    string apiKey = Environment.GetEnvironmentVariable("AZURE_OPENAI_KEY") ?? string.Empty;
+
+    // if apiKey is empty, use DefaultAzureCredential, otherwise use AzureKeyCredential
+    return string.IsNullOrEmpty(apiKey)
+        ? new AzureOpenAIClient(
+            new Uri(endpoint),
+            new DefaultAzureCredential(new DefaultAzureCredentialOptions
+            {
+                ExcludeVisualStudioCredential = true,
+            }))
+        : new AzureOpenAIClient(
+            new Uri(endpoint),
+            new AzureKeyCredential(apiKey));
+});
+
+// Register the GitHub MCP client for PR creation via remote MCP server
+builder.Services.AddSingleton<GithubMcpClient>();
 
 builder.Services
     .AddApplicationInsightsTelemetryWorkerService()
