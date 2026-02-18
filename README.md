@@ -82,9 +82,19 @@ The repository currently contains these language resources and corresponding MCP
 - Flutter
   - Resource: `Languages/Flutter/flutter-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Flutter.cs`)
+
+- Rust
+  - Resource: `Languages/Rust/rust-best-practices.md`
   - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Rust.cs`)
 
 - C++
+  - Resource: `Languages/Cpp/cpp-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Cpp.cs`)
+
+- COBOL
+  - Resource: `Languages/Cobol/cobol-best-practices.md`
+  - MCP tool pattern: `Functions/<Language>Tools.cs` (e.g. `Functions/Cobol.cs`)
+
 ## Prerequisites
 
 - .NET 9 SDK (required)
