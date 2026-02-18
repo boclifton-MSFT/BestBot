@@ -77,6 +77,17 @@ internal static partial class VersionCheckTool
                 pageSnippet = snippet.Length > 3000 ? snippet[..3000] : snippet,
             }, JsonOptions);
         }
+        catch (UriFormatException ex)
+        {
+            return JsonSerializer.Serialize(new
+            {
+                languageName,
+                currentVersion,
+                error = $"Invalid URL format: {ex.Message}",
+                isNewer = false,
+                latestDetected = (string?)null,
+            });
+        }
         catch (HttpRequestException ex)
         {
             return JsonSerializer.Serialize(new
