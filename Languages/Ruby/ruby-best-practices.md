@@ -1,4 +1,5 @@
 ---
+language: "Ruby"
 language_version: "3.4"
 last_checked: "2026-02-11"
 resource_hash: ""

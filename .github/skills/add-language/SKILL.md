@@ -89,6 +89,7 @@ Every best-practices markdown file MUST begin with a YAML frontmatter block for 
 
 ```yaml
 ---
+language: "<human-readable display name>"
 language_version: "<current stable version>"
 last_checked: "<YYYY-MM-DD of creation>"
 resource_hash: ""
@@ -97,7 +98,8 @@ version_source_url: "<URL to check for latest version>"
 ```
 
 | Field | Description | Example |
-|-------|-------------|---------|
+|-------|-------------|----------|
+| `language` | Human-readable display name | `"Python"`, `"C++"`, `"Vue 3"`, `".NET Aspire"` |
 | `language_version` | Current stable major.minor version | `"3.14"` (Python), `"1.24"` (Go), `"2023"` (COBOL) |
 | `last_checked` | ISO date of creation or last check | `"2026-02-18"` |
 | `resource_hash` | SHA-256 hash (leave empty on creation) | `""` |
@@ -334,7 +336,8 @@ Before considering the task complete, verify all of the following:
 
 - [ ] Researched 3–5 authoritative sources for the language
 - [ ] Created `Languages/<Language>/<language>-best-practices.md` (100–250 lines)
-- [ ] Markdown begins with YAML frontmatter (`language_version`, `last_checked`, `resource_hash`, `version_source_url`)
+- [ ] Markdown begins with YAML frontmatter (`language`, `language_version`, `last_checked`, `resource_hash`, `version_source_url`)
+- [ ] Frontmatter `language` field contains the human-readable display name (e.g., `"C++"`, `"Vue 3"`)
 - [ ] Markdown includes all required sections in standard order (Overview, When to use, Tooling & ecosystem, Recommended formatting & linters, Testing & CI recommendations, Packaging & release guidance, Security & secrets best practices, Recommended libraries, Minimal example, Further reading, Resources)
 - [ ] Section names use `&` (not "and") where the standard specifies (e.g., `Tooling & ecosystem`)
 - [ ] Resources section has minimum 5 canonical HTTPS URLs

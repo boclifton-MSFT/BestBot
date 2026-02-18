@@ -1,4 +1,5 @@
 ---
+language: "Python"
 language_version: "3.14"
 last_checked: "2026-02-11"
 resource_hash: ""

@@ -7,6 +7,12 @@ namespace BestPracticesMcp.UpdateWorker.Models;
 internal sealed class FrontmatterMetadata
 {
     /// <summary>
+    /// The human-readable display name of the language or framework.
+    /// Example: "C#", "Python", "Vue 3", ".NET Aspire".
+    /// </summary>
+    public string Language { get; set; } = string.Empty;
+
+    /// <summary>
     /// The current stable major.minor version of the language or framework.
     /// Example: "3.13" for Python, "1.24" for Go, "ES2025" for JavaScript.
     /// </summary>

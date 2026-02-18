@@ -1,4 +1,5 @@
 ---
+language: "Vue 3"
 language_version: "3.5"
 last_checked: "2026-02-11"
 resource_hash: ""

@@ -30,6 +30,7 @@ Provide one URL per line (official docs, language website, RFCs, major style gui
    - The file MUST begin with a YAML frontmatter block:
      ```yaml
      ---
+     language: "<human-readable display name>"
      language_version: "<current stable version>"
      last_checked: "<YYYY-MM-DD>"
      resource_hash: ""

@@ -15,7 +15,7 @@ internal static class FrontmatterTool
     /// Reads and returns the YAML frontmatter metadata from a markdown document.
     /// </summary>
     [Description("Parse the YAML frontmatter from a best-practices markdown document. " +
-                 "Returns the language_version, last_checked, resource_hash, and version_source_url. " +
+                 "Returns the language, language_version, last_checked, resource_hash, and version_source_url. " +
                  "Also returns the list of resource URLs found in the ## Resources section.")]
     public static string ReadFrontmatter(
         [Description("The full markdown content of the best-practices file")] string markdownContent)
@@ -25,6 +25,7 @@ internal static class FrontmatterTool
 
         return System.Text.Json.JsonSerializer.Serialize(new
         {
+            language = metadata.Language,
             languageVersion = metadata.LanguageVersion,
             lastChecked = metadata.LastChecked,
             resourceHash = metadata.ResourceHash,

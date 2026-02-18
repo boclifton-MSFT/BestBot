@@ -1,4 +1,5 @@
 ---
+language: "PHP"
 language_version: "8.5"
 last_checked: "2026-02-11"
 resource_hash: ""

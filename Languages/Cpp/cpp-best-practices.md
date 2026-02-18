@@ -1,4 +1,5 @@
 ---
+language: "C++"
 language_version: "C++23"
 last_checked: "2026-02-11"
 resource_hash: ""

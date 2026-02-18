@@ -1,4 +1,5 @@
 ---
+language: "Swift"
 language_version: "6.1"
 last_checked: "2026-02-11"
 resource_hash: ""

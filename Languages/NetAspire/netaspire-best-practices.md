@@ -1,4 +1,5 @@
 ---
+language: ".NET Aspire"
 language_version: "13.1"
 last_checked: "2026-02-11"
 resource_hash: ""

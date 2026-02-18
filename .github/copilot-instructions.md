@@ -181,6 +181,7 @@ All language best-practices markdown files under `Languages/` **MUST** follow th
 
 ```yaml
 ---
+language: "<human-readable display name>"
 language_version: "<current stable version>"
 last_checked: "<YYYY-MM-DD>"
 resource_hash: ""

@@ -1,4 +1,5 @@
 ---
+language: "COBOL"
 language_version: "2023"
 last_checked: "2026-02-18"
 resource_hash: ""

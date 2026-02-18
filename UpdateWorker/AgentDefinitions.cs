@@ -29,6 +29,7 @@ internal static class AgentDefinitions
                     - If no changes are detected and the document is current, return needsUpdate: false.
                     - If changes are detected, produce a COMPLETE updated markdown document preserving the existing
                     structure, sections, format conventions, and YAML frontmatter schema.
+                    - Preserve the existing language field in the frontmatter.
                     - Update the frontmatter with new language_version, today's date as last_checked, and new resource_hash.
                     - Do NOT add information about beta, preview, or prerelease features.
                     - Provide a changeSummary explaining what changed and why each modification was made.

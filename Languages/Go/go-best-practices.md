@@ -1,4 +1,5 @@
 ---
+language: "Go"
 language_version: "1.24"
 last_checked: "2026-02-11"
 resource_hash: ""

@@ -1,4 +1,5 @@
 ---
+language: "Rust"
 language_version: "1.84"
 last_checked: "2026-02-11"
 resource_hash: ""

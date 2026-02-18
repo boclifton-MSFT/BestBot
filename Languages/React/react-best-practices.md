@@ -1,4 +1,5 @@
 ---
+language: "React"
 language_version: "19"
 last_checked: "2026-02-11"
 resource_hash: ""

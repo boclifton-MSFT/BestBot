@@ -1,4 +1,5 @@
 ---
+language: "JavaScript"
 language_version: "ES2025"
 last_checked: "2026-02-11"
 resource_hash: ""

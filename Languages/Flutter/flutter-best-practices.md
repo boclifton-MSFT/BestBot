@@ -1,4 +1,5 @@
 ---
+language: "Flutter"
 language_version: "3.27"
 last_checked: "2026-02-11"
 resource_hash: ""
