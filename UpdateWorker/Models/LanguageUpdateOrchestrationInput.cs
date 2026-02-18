@@ -20,4 +20,10 @@ internal sealed class LanguageUpdateOrchestrationInput
     /// Approximate characters-per-token ratio used for prompt budget estimates.
     /// </summary>
     public int EstimatedCharsPerToken { get; set; } = 4;
+
+    /// <summary>
+    /// UTC timestamp when the orchestration was triggered.
+    /// Used for deterministic date stamp generation in PR prompts.
+    /// </summary>
+    public DateTimeOffset TriggerTimeUtc { get; set; }
 }
