@@ -15,9 +15,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using OpenAI.Chat;
 
-var builder = FunctionsApplication.CreateBuilder(args);
+FunctionsApplicationBuilder builder = FunctionsApplication.CreateBuilder(args);
 
 builder.ConfigureFunctionsWebApplication();
 
@@ -27,7 +26,7 @@ builder.Services.Configure<UpdateWorkerOptions>(
 
 builder.Services.AddSingleton<AzureOpenAIClient>(sp =>
 {
-    var options = sp.GetRequiredService<IOptions<UpdateWorkerOptions>>().Value;
+    UpdateWorkerOptions options = sp.GetRequiredService<IOptions<UpdateWorkerOptions>>().Value;
     string endpoint = options.AzureOpenAIEndpoint;
 
     if (string.IsNullOrWhiteSpace(endpoint))
@@ -58,7 +57,7 @@ builder.Services
     .ConfigureFunctionsApplicationInsights();
 
 // Check if update worker is enabled and OpenAI is configured
-var config = builder.Configuration.GetSection(UpdateWorkerOptions.SectionName).Get<UpdateWorkerOptions>();
+UpdateWorkerOptions? config = builder.Configuration.GetSection(UpdateWorkerOptions.SectionName).Get<UpdateWorkerOptions>();
 bool updateWorkerEnabled = config?.Enabled ?? true; // Default to true if not configured
 string? openAIEndpoint = Environment.GetEnvironmentVariable("AZURE_OPENAI_ENDPOINT");
 
@@ -88,14 +87,14 @@ if (updateWorkerEnabled && !string.IsNullOrEmpty(openAIEndpoint))
     builder.Services.AddSingleton<GithubMcpClient>();
 
     // Build the AzureOpenAIClient to create the agent
-    var serviceProvider = builder.Services.BuildServiceProvider();
-    var openAIClient = serviceProvider.GetRequiredService<AzureOpenAIClient>();
+    ServiceProvider serviceProvider = builder.Services.BuildServiceProvider();
+    AzureOpenAIClient openAIClient = serviceProvider.GetRequiredService<AzureOpenAIClient>();
     string deploymentName = Environment.GetEnvironmentVariable("AZURE_OPENAI_DEPLOYMENT") ?? "gpt-4o";
 
     // Initialize the GitHub MCP client and filter to only the 3 tools the PrCreationAgent needs.
     // The repos + pull_requests toolsets expose 30+ tools; passing all of them bloats the
     // chat-completion request and can trigger 400 errors from Azure OpenAI.
-    var githubMcpClient = serviceProvider.GetRequiredService<GithubMcpClient>();
+    GithubMcpClient githubMcpClient = serviceProvider.GetRequiredService<GithubMcpClient>();
     var requiredGithubTools = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
     {
         "create_branch",        // repos toolset – create the auto-update branch
@@ -139,8 +138,8 @@ if (updateWorkerEnabled && !string.IsNullOrEmpty(openAIEndpoint))
 else
 {
     // Log why OpenAI client and agents are not being configured
-    var tempServiceProvider = builder.Services.BuildServiceProvider();
-    var logger = tempServiceProvider.GetRequiredService<ILogger<Program>>();
+    ServiceProvider tempServiceProvider = builder.Services.BuildServiceProvider();
+    ILogger<Program> logger = tempServiceProvider.GetRequiredService<ILogger<Program>>();
 
     if (!updateWorkerEnabled)
     {
