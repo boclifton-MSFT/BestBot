@@ -411,6 +411,7 @@ To add another language's best-practices follow the repository's current layout 
 
 1. Add the markdown resource
    - Create a new folder for the language under `Languages/` and add `<language>-best-practices.md` there, e.g. `Languages/Go/go-best-practices.md`.  Ensure the markdown file name uses `kebab-case`.
+   - The file **MUST** begin with the standard YAML frontmatter block (see [YAML frontmatter](#yaml-frontmatter) above) and follow the required section order documented in [`.github/copilot-instructions.md`](.github/copilot-instructions.md) under "Best-practices markdown format standard".
    - These language resources are included in the project output and are available at runtime from the build output `Resources/` folder (e.g. `AppContext.BaseDirectory + "Resources/go-best-practices.md"`).
 
 2. Add an MCP tool implementation
@@ -454,7 +455,7 @@ We welcome contributions of any size. The following guidelines help us keep chan
   - Ensure `dotnet build BestPracticesMcp.sln` succeeds.
   - If you add or change language resources, verify the files are copied to the build output `bin/Debug/net*/Resources/` and can be read by the tools.
 - Adding a new language/tool:
-  - Add a markdown resource under `Languages/<Language>/<language>-best-practices.md`.
+  - Add a markdown resource under `Languages/<Language>/<language>-best-practices.md`. The file must include YAML frontmatter and follow the standard section order (see [`.github/copilot-instructions.md`](.github/copilot-instructions.md) for the full format specification).
   - Add the corresponding MCP tool implementation `Functions/<Language>Tools.cs` (expose `Get<Language>BestPractices` and use `Utilities/FileCache` and `Utilities/ToolLogging<T>`).
   - Documentation sync requirement (COPILOT): When a new language resource or MCP tool is added, update this `README.md` to include the new language in the "Included languages" list and add the resource path (e.g. `Languages/<Language>/<language>-best-practices.md`) and the expected MCP tool path (e.g. `Functions/<Language>Tools.cs`). This README update must be included in the same PR that introduces the language.
 - PR size and scope:

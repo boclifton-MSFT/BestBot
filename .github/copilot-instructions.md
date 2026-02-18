@@ -173,4 +173,39 @@ After successful deployment:
 5. **Monitoring**: Application Insights configured for telemetry and performance monitoring
 6. **Documentation sync requirement (COPILOT)**: When a new language resource or MCP tool is added to the repository, Copilot (the automated contributor agent) MUST update `README.md` to include the new language in the "Included languages" section and add the resource path (e.g. `Languages/<Language>/<language>-best-practices.md`) and the expected MCP tool path (e.g. `Functions/<Language>Tools.cs`). This update should be included in the same PR that introduces the language to the codebase.
 
+### Best-practices markdown format standard
+
+All language best-practices markdown files under `Languages/` **MUST** follow this standard format. This ensures consistency across languages and compatibility with the automated update worker.
+
+**YAML frontmatter (REQUIRED at top of file):**
+
+```yaml
+---
+language_version: "<current stable version>"
+last_checked: "<YYYY-MM-DD>"
+resource_hash: ""
+version_source_url: "<URL to check for latest version>"
+---
+```
+
+**Required sections in order (use exact heading names):**
+
+1. `# <Language> Best Practices` — Title
+2. `## Overview` — 1–2 paragraphs on design philosophy and key characteristics
+3. `## When to use <Language> in projects` — Bullet list of ideal use cases
+4. `## Tooling & ecosystem` — Subsections: `### Core tools`, `### Project setup`
+5. `## Recommended formatting & linters` — Tools, config snippets, code style essentials
+6. `## Testing & CI recommendations` — Test framework, commands, CI config example
+7. `## Packaging & release guidance` — Build, distribute, version
+8. `## Security & secrets best practices` — Language-specific security patterns
+9. `## Recommended libraries` — Table or grouped list (1–2 per need)
+10. `## Minimal example` — Hello world + build/run commands
+11. `## Further reading` — Key links with descriptions
+12. `## Resources` — Bullet list of canonical URLs (`- Title — https://...`)
+
+**Section naming rules:**
+- Use `&` (not "and") in section names: `Tooling & ecosystem`, not `Tooling and ecosystem`
+- Use exact heading names as listed above for consistency and automation compatibility
+- The `## Resources` section MUST have at minimum 5 canonical HTTPS URLs
+
 Always build and validate your changes using the commands above before committing. The CI/CD pipeline expects properly formatted, buildable code.

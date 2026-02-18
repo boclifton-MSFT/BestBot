@@ -27,21 +27,31 @@ Provide one URL per line (official docs, language website, RFCs, major style gui
    - Even if there are Authoritative Documentation Sources are provided, search the internet for 3-5 (total) sources for reference documentation.
 2) Create a best-practices Markdown file at: Languages/<Language>/<language>-best-practices.md
    - Target ~150 lines (100–250 acceptable).
-   - Sections to include (in order):
-     - Short overview (1–2 paragraphs)
-     - When to use this language in projects
-     - Tooling & ecosystem (compilers, package managers, linters/formatters)
-     - Recommended formatting & linters with config snippets
-     - Testing & CI recommendations with example commands
-     - Packaging & release guidance
-     - Security & secrets best practices
-     - Recommended libraries (1–2 per common need)
-     - Minimal example (hello world + brief build/test CI snippet)
-     - Further reading: include any provided authoritative URLs
+   - The file MUST begin with a YAML frontmatter block:
+     ```yaml
+     ---
+     language_version: "<current stable version>"
+     last_checked: "<YYYY-MM-DD>"
+     resource_hash: ""
+     version_source_url: "<URL to check for latest version>"
+     ---
+     ```
+   - Sections to include (in order, using exact heading names):
+     - `## Overview` — Short overview (1–2 paragraphs)
+     - `## When to use <Language> in projects`
+     - `## Tooling & ecosystem` (compilers, package managers, linters/formatters; subsections: Core tools, Project setup)
+     - `## Recommended formatting & linters` with config snippets
+     - `## Testing & CI recommendations` with example commands
+     - `## Packaging & release guidance`
+     - `## Security & secrets best practices`
+     - `## Recommended libraries` (1–2 per common need, table format preferred)
+     - `## Minimal example` (hello world + brief build/test snippet)
+     - `## Further reading` — include any provided authoritative URLs
      - **Resources (REQUIRED)**: A top-level `## Resources` section that includes a bullet list of canonical web-accessible URLs (full https:// links). The Resources section MUST include at minimum the official language docs, core style or design guidelines, recommended analyzer/linter pages (if applicable), testing/CI guidance URL, and security guidance URL when available. Format rules for the Resources section:
        - Each resource must be a single bullet line starting with `- ` followed by the resource title and the full URL.
        - URLs must be directly accessible (no placeholders) and use HTTPS.
        - Keep entries concise; avoid long descriptive paragraphs in this section so automation can parse URLs easily.
+   - Section naming rules: Use `&` (not "and") in section names. Use exact heading names as listed above — do not rename or reorder sections.
    - Attribute sources and include brief license/attribution notes where needed.
 3) Add a C# MCP tool at: Languages/<Language>/<Language>.cs
    - Tool must expose the markdown content via the MCP SSE endpoint, matching existing patterns in the repo.

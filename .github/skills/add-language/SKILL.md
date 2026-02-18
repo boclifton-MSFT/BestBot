@@ -83,12 +83,36 @@ After gathering sources, extract and organize key information into these categor
 
 **Target length:** ~150 lines (100–250 acceptable)
 
+**YAML frontmatter (REQUIRED):**
+
+Every best-practices markdown file MUST begin with a YAML frontmatter block for version tracking by the automated update worker. Place this block at the very top of the file, before the title:
+
+```yaml
+---
+language_version: "<current stable version>"
+last_checked: "<YYYY-MM-DD of creation>"
+resource_hash: ""
+version_source_url: "<URL to check for latest version>"
+---
+```
+
+| Field | Description | Example |
+|-------|-------------|---------|
+| `language_version` | Current stable major.minor version | `"3.14"` (Python), `"1.24"` (Go), `"2023"` (COBOL) |
+| `last_checked` | ISO date of creation or last check | `"2026-02-18"` |
+| `resource_hash` | SHA-256 hash (leave empty on creation) | `""` |
+| `version_source_url` | Canonical URL for checking the latest release | `"https://www.python.org/downloads/"` |
+
 **Required sections (in order):**
 
 ```markdown
 # <Language> Best Practices
 
 <1–2 paragraph overview: what the language is, philosophy, key strengths>
+
+## Overview
+
+<1–2 paragraphs expanding on the language's design philosophy, key characteristics, and ecosystem>
 
 ## When to use <Language> in projects
 
@@ -99,8 +123,8 @@ After gathering sources, extract and organize key information into these categor
 ### Core tools
 <Compiler/interpreter, package manager, formatter, linter>
 
-### Package management
-<Commands for init, install, update>
+### Project setup
+<Commands to create, build, and run a basic project>
 
 ## Recommended formatting & linters
 
@@ -140,6 +164,11 @@ After gathering sources, extract and organize key information into these categor
 - URLs must be directly accessible HTTPS links (no placeholders)
 - Minimum entries: official docs, style guide, linter/formatter page, testing guidance, security guidance
 - Keep entries concise — one line per resource
+
+**Section naming rules:**
+- Use `&` (not "and") in section names: `Tooling & ecosystem`, not `Tooling and ecosystem`
+- Use exact heading names as listed in the template above for consistency and automated update worker compatibility
+- Do not add extra top-level `##` sections not listed in the standard; fold language-specific content into the closest standard section as subsections (`###`)
 
 **Content guidelines:**
 - Write original content; summarize and link rather than copying verbatim
@@ -305,7 +334,9 @@ Before considering the task complete, verify all of the following:
 
 - [ ] Researched 3–5 authoritative sources for the language
 - [ ] Created `Languages/<Language>/<language>-best-practices.md` (100–250 lines)
-- [ ] Markdown includes all required sections (overview, tooling, testing, security, resources)
+- [ ] Markdown begins with YAML frontmatter (`language_version`, `last_checked`, `resource_hash`, `version_source_url`)
+- [ ] Markdown includes all required sections in standard order (Overview, When to use, Tooling & ecosystem, Recommended formatting & linters, Testing & CI recommendations, Packaging & release guidance, Security & secrets best practices, Recommended libraries, Minimal example, Further reading, Resources)
+- [ ] Section names use `&` (not "and") where the standard specifies (e.g., `Tooling & ecosystem`)
 - [ ] Resources section has minimum 5 canonical HTTPS URLs
 - [ ] Created `Languages/<Language>/<Language>.cs` matching the template exactly
 - [ ] MCP tool name follows pattern: `get_<snake_name>_best_practices`
